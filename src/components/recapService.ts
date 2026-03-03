@@ -2,7 +2,7 @@ import { RecapData, DateInfo } from "../types.js";
 
 export class RecapService {
   private static readonly GITHUB_RAW_BASE =
-    "https://raw.githubusercontent.com/Paradoxum-Wikis/AEWiki-Recap/main/data";
+    "https://github.com/paradoxum-wikis/automation/tree/main/aew/recap/data";
   private static readonly CACHE_KEY_PREFIX = "aewiki-recap-";
   private static readonly INDEX_CACHE_KEY = "aewiki-available-files";
   private static readonly INDEX_CACHE_DURATION = 1 * 24 * 60 * 60 * 1000; // 1 day

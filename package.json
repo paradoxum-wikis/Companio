@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "ALTER EGO Wiki Companion - A site for wiki statistics and insights",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "format": "prettier . --write"
+    "dev": "bunx --bun vite",
+    "build": "bunx --bun vite build",
+    "preview": "bunx vite preview",
+    "format": "bunx prettier . --write"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",

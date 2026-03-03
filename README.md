@@ -2,9 +2,9 @@
 
 # AEWiki Companion
 
-The companion site for the ALTER EGO Wiki. Data for leaderboards is taken from [Recap](https://github.com/Paradoxum-Wikis/AEWiki-Recap).
+The companion site for the ALTER EGO Wiki. Data for leaderboards is taken from [Recap](https://github.com/paradoxum-wikis/automation/tree/main/aew/recap).
 
-## Local
+## Build
 
 1. **Clone the repo**
 
@@ -16,19 +16,10 @@ The companion site for the ALTER EGO Wiki. Data for leaderboards is taken from [
 2. **Install deps**
 
    ```bash
-   npm install
+   bun install
    ```
 
 3. **Serve**
    ```bash
-   npm run dev
+   bun run dev
    ```
-
-## Production
-
-This repository was deployed on Netlify, you may want to do the same.
-
-**Build settings:**
-
-- Build command: `npm run build`
-- Publish directory: `dist`

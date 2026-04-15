@@ -120,7 +120,7 @@ export class RecapService {
       const availableFiles = new Set<string>();
 
       const rootResponse = await fetch(
-        "https://api.github.com/repos/paradoxum-wikis/automation/contents/aew/recap/data",
+        "https://api.github.com/repos/paradoxum-wikis/automation/contents/data/recap/aew/legacy",
       );
 
       if (!rootResponse.ok) {

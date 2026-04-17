@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-  <title>ALTER EGO Wiki Companion</title>
+  <title>Paradoxum Wikis Companio</title>
   <meta
     name="description"
     content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community."
@@ -27,7 +27,7 @@
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ae.tds-editor.com/" />
-  <meta property="og:title" content="ALTER EGO Wiki Companion" />
+  <meta property="og:title" content="Paradoxum Wikis Companio" />
   <meta
     property="og:description"
     content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community."
@@ -36,13 +36,13 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="ALTER EGO Wiki - Join our community" />
-  <meta property="og:site_name" content="ALTER EGO Wiki Companion" />
+  <meta property="og:site_name" content="Paradoxum Wikis Companio" />
   <meta property="og:locale" content="en_US" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@isALTEREGOout" />
   <meta name="twitter:creator" content="@isALTEREGOout" />
-  <meta name="twitter:title" content="ALTER EGO Wiki Companion" />
+  <meta name="twitter:title" content="Paradoxum Wikis Companio" />
   <meta
     name="twitter:description"
     content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community."

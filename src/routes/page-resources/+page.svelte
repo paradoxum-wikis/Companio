@@ -187,7 +187,7 @@
 </script>
 
 <svelte:head>
-  <title>TDS Page Resources | ALTER EGO Wiki Companion</title>
+  <title>TDS Page Resources | Paradoxum Wikis Companio</title>
 </svelte:head>
 
 <div class="tds-page-container">

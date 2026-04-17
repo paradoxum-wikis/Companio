@@ -84,7 +84,7 @@
 </script>
 
 <svelte:head>
-  <title>Weekly Recap | ALTER EGO Wiki Companion</title>
+  <title>Weekly Recap | Paradoxum Wikis Companio</title>
   <meta
     name="description"
     content="Weekly contributor leaderboard for the ALTER EGO Wiki. Track top contributors and their weekly contributions."
@@ -96,7 +96,7 @@
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ae.tds-editor.com/recap/" />
-  <meta property="og:title" content="Weekly Recap | ALTER EGO Wiki Companion" />
+  <meta property="og:title" content="Weekly Recap | Paradoxum Wikis Companio" />
   <meta
     property="og:description"
     content="Weekly contributor leaderboard for the ALTER EGO Wiki. Track top contributors and their weekly contributions."
@@ -108,13 +108,13 @@
     property="og:image:alt"
     content="ALTER EGO Wiki Weekly Recap - Track top contributors"
   />
-  <meta property="og:site_name" content="ALTER EGO Wiki Companion" />
+  <meta property="og:site_name" content="Paradoxum Wikis Companio" />
   <meta property="og:locale" content="en_US" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@isALTEREGOout" />
   <meta name="twitter:creator" content="@isALTEREGOout" />
-  <meta name="twitter:title" content="Weekly Recap | ALTER EGO Wiki Companion" />
+  <meta name="twitter:title" content="Weekly Recap | Paradoxum Wikis Companio" />
   <meta
     name="twitter:description"
     content="Weekly contributor leaderboard for the ALTER EGO Wiki. Track top contributors and their weekly contributions."
@@ -139,12 +139,12 @@
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      "name": "Weekly Recap | ALTER EGO Wiki Companion",
+      "name": "Weekly Recap | Paradoxum Wikis Companio",
       "description": "Weekly contributor leaderboard for the ALTER EGO Wiki. Track top contributors and their weekly contributions.",
       "url": "https://ae.tds-editor.com/recap/",
       "isPartOf": {
         "@type": "WebSite",
-        "name": "ALTER EGO Wiki Companion",
+        "name": "Paradoxum Wikis Companio",
         "url": "https://ae.tds-editor.com/"
       },
       "publisher": {

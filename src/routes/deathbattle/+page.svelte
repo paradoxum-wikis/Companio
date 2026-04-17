@@ -50,7 +50,7 @@
 </script>
 
 <svelte:head>
-  <title>Deathbattle Statistics | ALTER EGO Wiki Companion</title>
+  <title>Deathbattle Statistics | Paradoxum Wikis Companio</title>
   <meta
     name="description"
     content="View combat statistics and leaderboards from our Discord ALTERSHAPER bot."
@@ -62,7 +62,7 @@
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://ae.tds-editor.com/deathbattle/" />
-  <meta property="og:title" content="Deathbattle Statistics | ALTER EGO Wiki Companion" />
+  <meta property="og:title" content="Deathbattle Statistics | Paradoxum Wikis Companio" />
   <meta
     property="og:description"
     content="View combat statistics and leaderboards from our Discord ALTERSHAPER bot."
@@ -71,13 +71,13 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="ALTER EGO Wiki Deathbattle - View Statistics" />
-  <meta property="og:site_name" content="ALTER EGO Wiki Companion" />
+  <meta property="og:site_name" content="Paradoxum Wikis Companio" />
   <meta property="og:locale" content="en_US" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@isALTEREGOout" />
   <meta name="twitter:creator" content="@isALTEREGOout" />
-  <meta name="twitter:title" content="Deathbattle Statistics | ALTER EGO Wiki Companion" />
+  <meta name="twitter:title" content="Deathbattle Statistics | Paradoxum Wikis Companio" />
   <meta
     name="twitter:description"
     content="View combat statistics and leaderboards from our Discord ALTERSHAPER bot."
@@ -96,12 +96,12 @@
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      "name": "Deathbattle Statistics | ALTER EGO Wiki Companion",
+      "name": "Deathbattle Statistics | Paradoxum Wikis Companio",
       "description": "View combat statistics and leaderboards from our Discord ALTERSHAPER bot.",
       "url": "https://ae.tds-editor.com/deathbattle/",
       "isPartOf": {
         "@type": "WebSite",
-        "name": "ALTER EGO Wiki Companion",
+        "name": "Paradoxum Wikis Companio",
         "url": "https://ae.tds-editor.com/"
       },
       "publisher": {

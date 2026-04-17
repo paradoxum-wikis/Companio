@@ -19,7 +19,7 @@
 				alt="ALTER EGO Wiki"
 				class="w-6 h-6 hidden md:block"
 			/>
-			<span class="hidden md:inline">ALTER EGO Wiki Companion</span>
+			<span class="hidden md:inline">Paradoxum Wikis Companio</span>
 			<span class="md:hidden">AEWiki Companion</span>
 		</a>
 		<button id="themeToggle" class="relative p-2 border border-white/30 rounded-md hover:bg-white/10 text-white transition-colors flex items-center justify-center w-10 h-10 cursor-pointer" aria-label="Toggle theme" onclick={toggleMode}>

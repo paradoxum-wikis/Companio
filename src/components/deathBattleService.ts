@@ -1,4 +1,4 @@
-import { BattleStats, BattleRecord } from "../types.js";
+import type { BattleStats, BattleRecord } from "../types.js";
 
 export class DeathBattleService {
   private static readonly STATS_API =
@@ -79,7 +79,6 @@ export class DeathBattleService {
       }
 
       const data: BattleRecord[] = await response.json();
-      // Sort by battle date (newest first)
       data.sort(
         (a, b) =>
           new Date(b.battleDate).getTime() - new Date(a.battleDate).getTime(),

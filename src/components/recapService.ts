@@ -1,4 +1,4 @@
-import { RecapData, DateInfo } from "../types.js";
+import type { RecapData, DateInfo } from "../types.js";
 
 export class RecapService {
   private static readonly GITHUB_RAW_BASE =
@@ -89,7 +89,6 @@ export class RecapService {
         }
       }
 
-      // Sort by date (oldest first) and remove the oldest 25%
       cacheEntries.sort((a, b) => a.date.localeCompare(b.date));
       const entriesToRemove = Math.ceil(cacheEntries.length * 0.25);
 

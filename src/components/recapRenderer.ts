@@ -1,4 +1,4 @@
-import { RecapData, Contributor } from "../types.js";
+import type { RecapData, Contributor } from "../types.js";
 import { RecapService } from "./recapService.js";
 
 export class RecapRenderer {

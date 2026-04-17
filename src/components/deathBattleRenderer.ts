@@ -1,4 +1,4 @@
-import { BattleStats, BattleRecord } from "../types.js";
+import type { BattleStats, BattleRecord } from "../types.js";
 import { DeathBattleService } from "./deathBattleService.js";
 import { escapeHtml } from "./utils.js";
 
@@ -43,7 +43,7 @@ export class DeathBattleRenderer {
   private allRecords: BattleRecord[] = [];
 
   constructor() {
-    // Casual elements
+    // Casual
     this.casualLoadingElement = document.getElementById("casualLoading")!;
     this.casualErrorElement = document.getElementById("casualError")!;
     this.casualErrorMessageElement =
@@ -56,7 +56,7 @@ export class DeathBattleRenderer {
       document.getElementById("casualTotalBattles")!;
     this.casualLastBattleElement = document.getElementById("casualLastBattle")!;
 
-    // Ranked elements
+    // Ranked
     this.rankedLoadingElement = document.getElementById("rankedLoading")!;
     this.rankedErrorElement = document.getElementById("rankedError")!;
     this.rankedErrorMessageElement =
@@ -69,7 +69,7 @@ export class DeathBattleRenderer {
       document.getElementById("rankedTotalBattles")!;
     this.rankedLastBattleElement = document.getElementById("rankedLastBattle")!;
 
-    // Records elements
+    // Records
     this.recordsLoadingElement = document.getElementById("recordsLoading")!;
     this.recordsErrorElement = document.getElementById("recordsError")!;
     this.recordsErrorMessageElement = document.getElementById(
@@ -77,7 +77,7 @@ export class DeathBattleRenderer {
     )!;
     this.battleRecordsElement = document.getElementById("battleRecords")!;
 
-    // Pagination elements
+    // Pagination
     this.recordsPaginationElement =
       document.getElementById("recordsPagination")!;
     this.recordsPerPageElement = document.getElementById(
@@ -201,22 +201,18 @@ export class DeathBattleRenderer {
 
     const casualPlayers = stats.filter((player) => player.totalBattles > 0);
 
-    // Sort by weighted score with 3+ matches priority
     casualPlayers.sort((a, b) => {
       const aHasMinMatches = a.totalBattles >= 3;
       const bHasMinMatches = b.totalBattles >= 3;
 
-      // If one has min matches and the other doesn't, prioritize the one with min matches
       if (aHasMinMatches && !bHasMinMatches) return -1;
       if (!aHasMinMatches && bHasMinMatches) return 1;
 
-      // If both have same min match status, sort by weighted score, then by total battles
       if (b.weightedScore !== a.weightedScore)
         return b.weightedScore - a.weightedScore;
       return b.totalBattles - a.totalBattles;
     });
 
-    // Calculate totals
     const totalPlayers = casualPlayers.length;
     const totalBattles = casualPlayers.reduce(
       (sum, p) => sum + p.totalBattles,
@@ -252,12 +248,10 @@ export class DeathBattleRenderer {
     this.rankedLoadingElement.style.display = "none";
     this.rankedErrorElement.style.display = "none";
 
-    // Filter
     const rankedPlayers = stats.filter(
       (player) => player.rankedTotalBattles > 0,
     );
 
-    // 5+ matches priority
     rankedPlayers.sort((a, b) => {
       const aHasMinMatches = a.rankedTotalBattles >= 5;
       const bHasMinMatches = b.rankedTotalBattles >= 5;
@@ -321,7 +315,6 @@ export class DeathBattleRenderer {
       return;
     }
 
-    // Filter
     this.filteredRecords = this.allRecords;
     if (venueFilter !== "all") {
       this.filteredRecords = this.allRecords.filter((record) => {

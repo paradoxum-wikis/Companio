@@ -1,6 +1,7 @@
-body {
+.tds-page-container {
   background-image: url("/bg.png");
   font-family: "Montserrat", sans-serif !important;
+  min-height: 100vh;
 }
 
 .rounded25 {

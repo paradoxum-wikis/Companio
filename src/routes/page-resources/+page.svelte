@@ -190,6 +190,7 @@
   <title>TDS Page Resources | ALTER EGO Wiki Companion</title>
 </svelte:head>
 
+<div class="tds-page-container">
 <Navigation />
 <HeroSection {currentGame} />
 
@@ -259,3 +260,4 @@
     </div>
   </div>
 </footer>
+</div>

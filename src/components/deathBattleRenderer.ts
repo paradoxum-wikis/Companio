@@ -460,7 +460,7 @@ export class DeathBattleRenderer {
     <div class="leaderboard-rank ${rankClass} me-3">
       ${rank <= 3 ? this.getRankIcon(rank) : rank}
     </div>
-    <div class="contributor-info flex-grow-1 me-3">
+    <div class="contributor-info grow me-3">
       <h6 class="mb-1 fw-bold">
         ${escapeHtml(player.userTag)}
       </h6>
@@ -510,7 +510,7 @@ export class DeathBattleRenderer {
 
     item.innerHTML = `
       <div class="d-flex justify-content-between align-items-start mb-2">
-        <div class="flex-grow-1">
+        <div class="grow">
           <h6 class="mb-1">
             <span class="text-success fw-bold">${escapeHtml(record.winnerTag)}</span>
             <small class="text-muted mx-2">defeated</small>

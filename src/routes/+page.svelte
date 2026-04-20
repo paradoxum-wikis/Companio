@@ -1,213 +1,657 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import Trophy from '@lucide/svelte/icons/trophy';
-  import Book from '@lucide/svelte/icons/book';
-  import MessageCircle from '@lucide/svelte/icons/message-circle';
-  import Gamepad2 from '@lucide/svelte/icons/gamepad-2';
-  import Zap from '@lucide/svelte/icons/zap';
-  import Wrench from '@lucide/svelte/icons/wrench';
-  import ArrowRight from '@lucide/svelte/icons/arrow-right';
-  import ExternalLink from '@lucide/svelte/icons/external-link';
-
-  onMount(async () => {
-    await import('../components/discord');
-  });
+	import Trophy from '@lucide/svelte/icons/trophy';
+	import Book from '@lucide/svelte/icons/book';
+	import MessageCircle from '@lucide/svelte/icons/message-circle';
+	import Gamepad2 from '@lucide/svelte/icons/gamepad-2';
+	import Zap from '@lucide/svelte/icons/zap';
+	import Wrench from '@lucide/svelte/icons/wrench';
+	import ArrowRight from '@lucide/svelte/icons/arrow-right';
+	import ExternalLink from '@lucide/svelte/icons/external-link';
+	import DiscordWidget from '../components/Discord.svelte';
 </script>
 
 <svelte:head>
-  <title>Paradoxum Wikis Companio</title>
-  <meta
-    name="description"
-    content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community."
-  />
-  <meta
-    name="keywords"
-    content="ALTER EGO, Wiki, Companion, Leaderboard, ALTERPEDIA, Discord, Community"
-  />
-
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://ae.tds-editor.com/" />
-  <meta property="og:title" content="Paradoxum Wikis Companio" />
-  <meta
-    property="og:description"
-    content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community."
-  />
-  <meta property="og:image" content="https://ae.tds-editor.com/banner.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="ALTER EGO Wiki - Join our community" />
-  <meta property="og:site_name" content="Paradoxum Wikis Companio" />
-  <meta property="og:locale" content="en_US" />
-
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@isALTEREGOout" />
-  <meta name="twitter:creator" content="@isALTEREGOout" />
-  <meta name="twitter:title" content="Paradoxum Wikis Companio" />
-  <meta
-    name="twitter:description"
-    content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community."
-  />
-  <meta name="twitter:image" content="https://ae.tds-editor.com/banner.png" />
-  <meta name="twitter:image:alt" content="ALTER EGO Wiki - Join our community" />
-
-  <meta name="theme-color" content="#900c3f" />
-  <meta name="apple-mobile-web-app-title" content="AEWiki Companion" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-  <link rel="canonical" href="https://ae.tds-editor.com/" />
-  <link
-    rel="icon"
-    href="https://static.wikia.nocookie.net/alter-ego/images/4/4a/Site-favicon.ico"
-  />
-  <link
-    rel="apple-touch-icon"
-    href="https://static.wikia.nocookie.net/alter-ego/images/4/4a/Site-favicon.ico"
-  />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
-    rel="stylesheet"
-  />
+	<title>Paradoxum Wikis Companio</title>
+	<meta name="description" content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community." />
+	<meta name="keywords" content="ALTER EGO, Wiki, Companion, Leaderboard, ALTERPEDIA, Discord, Community" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://ae.tds-editor.com/" />
+	<meta property="og:title" content="Paradoxum Wikis Companio" />
+	<meta property="og:description" content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community." />
+	<meta property="og:image" content="https://ae.tds-editor.com/banner.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="ALTER EGO Wiki - Join our community" />
+	<meta property="og:site_name" content="Paradoxum Wikis Companio" />
+	<meta property="og:locale" content="en_US" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:site" content="@isALTEREGOout" />
+	<meta name="twitter:creator" content="@isALTEREGOout" />
+	<meta name="twitter:title" content="Paradoxum Wikis Companio" />
+	<meta name="twitter:description" content="The companion site for the ALTER EGO Wiki. Access weekly contributor leaderboards, browse the ALTERPEDIA, and join our Discord community." />
+	<meta name="twitter:image" content="https://ae.tds-editor.com/banner.png" />
+	<meta name="twitter:image:alt" content="ALTER EGO Wiki - Join our community" />
+	<meta name="theme-color" content="#900c3f" />
+	<meta name="apple-mobile-web-app-title" content="AEWiki Companion" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<link rel="canonical" href="https://ae.tds-editor.com/" />
+	<link
+		rel="apple-touch-icon"
+		href="https://static.wikia.nocookie.net/alter-ego/images/4/4a/Site-favicon.ico"
+	/>
+	<link rel="icon" href="https://static.wikia.nocookie.net/alter-ego/images/4/4a/Site-favicon.ico" />
 </svelte:head>
 
-<main class="relative isolate px-6 pt-16 pb-24 sm:pt-24 sm:pb-32 lg:px-8">
-  <!-- Hero Section -->
-  <div class="mx-auto max-w-7xl text-center">
-    <div class="mb-10 flex justify-center">
-      <img
-        src="/wikilogo.png"
-        alt="ALTER EGO Wiki Logo"
-        class="h-28 sm:h-36 object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
-      />
-    </div>
-    <h1 class="text-4xl font-extrabold tracking-tight sm:text-6xl mb-6 text-foreground">
-      Welcome, <span class="text-transparent bg-clip-text bg-linear-to-r from-primary to-accent">Alter Egoist!</span>
-    </h1>
-    <p class="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-16 leading-relaxed">
-      Explore the ALTER EGO Wiki ecosystem with our various tools and resources on this companion site.
-    </p>
-  </div>
+<div class="page-root">
+	<!-- Background mesh -->
+	<div class="bg-mesh" aria-hidden="true">
+		<div class="mesh-orb orb-1"></div>
+		<div class="mesh-orb orb-2"></div>
+		<div class="mesh-orb orb-3"></div>
+		<div class="grid-lines"></div>
+	</div>
 
-  <!-- Interactive Grid -->
-  <div class="mx-auto max-w-6xl">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
+	<main>
+		<!-- Hero -->
+		<section class="hero">
+			<h1 class="hero-title">
+				<span class="hero-title-line1">Welcome,</span>
+				<span class="hero-title-line2">Alter Egoist</span>
+			</h1>
 
-      <!-- Card 1 -->
-      <a href="/recap/" class="group relative flex flex-col items-start justify-between rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <div class="rounded-xl bg-primary/10 p-3 text-primary mb-6 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <Trophy class="size-6" />
-        </div>
-        <div>
-          <h3 class="text-xl font-bold text-card-foreground mb-3">Weekly Recap</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed mb-6">
-            Discover top contributors and weekly statistics from the ALTERPEDIA.
-          </p>
-        </div>
-        <div class="mt-auto flex items-center text-sm font-semibold text-primary">
-          View Leaderboard <ArrowRight class="ml-1.5 size-4 transition-transform group-hover:translate-x-1" />
-        </div>
-      </a>
+			<p class="hero-sub">
+				To the companio! For the more quirky things of ALTER EGO Wiki and Tower Defense Simulator Wiki!.<br/>(/▿＼)
+			</p>
+		</section>
 
-      <!-- Card 2 -->
-      <a href="https://alter-ego.fandom.com/wiki/" target="_blank" rel="noopener noreferrer" class="group relative flex flex-col items-start justify-between rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <div class="rounded-xl bg-primary/10 p-3 text-primary mb-6 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <Book class="size-6" />
-        </div>
-        <div>
-          <h3 class="text-xl font-bold text-card-foreground mb-3">ALTER EGO Wiki</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed mb-6">
-            Visit the ALTERPEDIA for ALTER EGO content and perhaps even contribute to the community!
-          </p>
-        </div>
-        <div class="mt-auto flex items-center text-sm font-semibold text-primary">
-          Browse Wiki <ExternalLink class="ml-1.5 size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </div>
-      </a>
+		<!-- Main grid -->
+		<section class="cards-section">
+			<div class="section-label">Tools & Resources</div>
 
-      <!-- Card 3 -->
-      <a href="https://x.com/isALTEREGOout" target="_blank" rel="noopener noreferrer" class="group relative flex flex-col items-start justify-between rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <div class="rounded-xl bg-primary/10 p-3 text-primary mb-6 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <MessageCircle class="size-6" />
-        </div>
-        <div>
-          <h3 class="text-xl font-bold text-card-foreground mb-3">Fan Page</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed mb-6">
-            Stay updated with the latest ALTER EGO news and community discussions.
-          </p>
-        </div>
-        <div class="mt-auto flex items-center text-sm font-semibold text-primary">
-          Follow Us! <ExternalLink class="ml-1.5 size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </div>
-      </a>
+			<div class="cards-grid">
 
-      <!-- Card 4 -->
-      <a href="https://aeb.tds-editor.com/" target="_blank" rel="noopener noreferrer" class="group relative flex flex-col items-start justify-between rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <div class="rounded-xl bg-primary/10 p-3 text-primary mb-6 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <Gamepad2 class="size-6" />
-        </div>
-        <div>
-          <h3 class="text-xl font-bold text-card-foreground mb-3">ALTER EGO: Before</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed mb-6">
-            Play the first tech demo of the ALTER EGO fan game made by us!
-          </p>
-        </div>
-        <div class="mt-auto flex items-center text-sm font-semibold text-primary">
-          Play Game <ExternalLink class="ml-1.5 size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </div>
-      </a>
+				<!-- Weekly Recap -->
+				<a href="/recap/" class="card card-featured card-recap" aria-label="Weekly Recap">
+					<div class="card-accent-bar"></div>
+					<div class="card-icon-row">
+						<div class="card-icon">
+							<Trophy/>
+						</div>
+						<div class="card-badge">Featured</div>
+					</div>
+					<div class="card-body">
+						<h2 class="card-title">Weekly Recap</h2>
+						<p class="card-desc">Browse the contributor leaderboard and track who's been building the ALTERPEDIA each week.</p>
+					</div>
+					<div class="card-footer">
+						<span class="card-link">Browse Tool<ArrowRight class="link-icon" /></span>
+					</div>
+				</a>
 
-      <!-- Card 5 -->
-      <a href="/deathbattle/" class="group relative flex flex-col items-start justify-between rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <div class="rounded-xl bg-primary/10 p-3 text-primary mb-6 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <Zap class="size-6" />
-        </div>
-        <div>
-          <h3 class="text-xl font-bold text-card-foreground mb-3">Deathbattle Statistics</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed mb-6">
-            View combat statistics and leaderboards from our Discord ALTERSHAPER bot.
-          </p>
-        </div>
-        <div class="mt-auto flex items-center text-sm font-semibold text-primary">
-          View Statistics <ArrowRight class="ml-1.5 size-4 transition-transform group-hover:translate-x-1" />
-        </div>
-      </a>
+				<!-- Deathbattle -->
+				<a href="/deathbattle/" class="card card-deathbattle" aria-label="Deathbattle Statistics">
+					<div class="card-accent-bar"></div>
+					<div class="card-icon-row">
+						<div class="card-icon">
+							<Zap/>
+						</div>
+					</div>
+					<div class="card-body">
+						<h2 class="card-title">Deathbattle Stats</h2>
+						<p class="card-desc">Combat stats and rankings from the ALTERSHAPER Discord bot.</p>
+					</div>
+					<div class="card-footer">
+						<span class="card-link">Browse Tool<ArrowRight class="link-icon" /></span>
+					</div>
+				</a>
 
-      <!-- Card 6 -->
-      <a href="/page-resources/" class="group relative flex flex-col items-start justify-between rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <div class="rounded-xl bg-primary/10 p-3 text-primary mb-6 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <Wrench class="size-6" />
-        </div>
-        <div>
-          <h3 class="text-xl font-bold text-card-foreground mb-3">Page Resources</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed mb-6">
-            Access various tools and resources for game pages.
-          </p>
-        </div>
-        <div class="mt-auto flex items-center text-sm font-semibold text-primary">
-          Open Resources <ArrowRight class="ml-1.5 size-4 transition-transform group-hover:translate-x-1" />
-        </div>
-      </a>
+				<!-- Page Resources -->
+				<a href="/page-resources/" class="card card-resources" aria-label="Page Resources">
+					<div class="card-accent-bar"></div>
+					<div class="card-icon-row">
+						<div class="card-icon">
+							<Wrench/>
+						</div>
+					</div>
+					<div class="card-body">
+						<h2 class="card-title">Page Resources</h2>
+						<p class="card-desc">Access and download game assets, icons, and thumbnails for wiki pages.</p>
+					</div>
+					<div class="card-footer">
+						<span class="card-link">Browse Tool<ArrowRight class="link-icon" /></span>
+					</div>
+				</a>
 
-    </div>
-  </div>
+				<!-- ALTERPEDIA -->
+				<a href="https://alter-ego.fandom.com/wiki/" target="_blank" rel="noopener noreferrer" class="card card-wiki" aria-label="ALTER EGO Wiki">
+					<div class="card-accent-bar"></div>
+					<div class="card-icon-row">
+						<div class="card-icon">
+							<Book/>
+						</div>
+						<div class="card-badge card-badge-info">Fandom</div>
+					</div>
+					<div class="card-body">
+						<h2 class="card-title">ALTER EGO Wiki</h2>
+						<p class="card-desc">Visit ALTER EGO Wiki and ALTERPEDIA!</p>
+					</div>
+					<div class="card-footer">
+						<span class="card-link">Visit Wiki<ExternalLink class="link-icon" /></span>
+					</div>
+				</a>
 
-  <!-- Community Section -->
-  <div class="mx-auto max-w-4xl pt-10 border-t border-border/50">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-extrabold tracking-tight text-foreground">Join the Community</h2>
-      <p class="text-muted-foreground mt-3 text-lg">Connect with other Alter Egoists on our Discord server.</p>
-    </div>
+				<!-- TDS Wiki -->
+				<a href="https://tds.fandom.com/wiki/" target="_blank" rel="noopener noreferrer" class="card card-wiki" aria-label="Tower Defense Simulator Wiki">
+					<div class="card-accent-bar"></div>
+					<div class="card-icon-row">
+						<div class="card-icon">
+							<Book/>
+						</div>
+						<div class="card-badge card-badge-info">Fandom</div>
+					</div>
+					<div class="card-body">
+						<h2 class="card-title">Tower Defense Simulator</h2>
+						<p class="card-desc">The official Tower Defense Simulator Wiki!</p>
+					</div>
+					<div class="card-footer">
+						<span class="card-link">Visit Wiki<ExternalLink class="link-icon" /></span>
+					</div>
+				</a>
 
-    <div class="rounded-2xl border border-border bg-card shadow-sm overflow-hidden flex items-center justify-center p-2 sm:p-6 bg-gradient-to-b from-card to-muted/20">
-      <div class="discord-widget w-full min-h-75 flex items-center justify-center rounded-xl" id="discordWidget">
-        <div class="flex flex-col items-center text-muted-foreground">
-          <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mb-4"></div>
-          <span class="font-medium">Loading Discord server...</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
+				<!-- X page -->
+				<a href="https://x.com/isALTEREGOout" target="_blank" rel="noopener noreferrer" class="card card-twitter" aria-label="Fan Page on X">
+					<div class="card-accent-bar"></div>
+					<div class="card-icon-row">
+						<div class="card-icon">
+							<MessageCircle/>
+						</div>
+						<div class="card-badge card-badge-info">X</div>
+					</div>
+					<div class="card-body">
+						<h2 class="card-title">Fan Page</h2>
+						<p class="card-desc">Stay updated with the latest ALTER EGO news and community discussions.</p>
+					</div>
+					<div class="card-footer">
+						<span class="card-link">Follow Us<ExternalLink class="link-icon" /></span>
+					</div>
+				</a>
+
+				<!-- AE Before -->
+				<a href="https://aeb.tds-editor.com/" target="_blank" rel="noopener noreferrer" class="card card-game" aria-label="ALTER EGO: Before">
+					<div class="card-accent-bar"></div>
+					<div class="card-icon-row">
+						<div class="card-icon">
+							<Gamepad2/>
+						</div>
+					</div>
+					<div class="card-body">
+						<h2 class="card-title">ALTER EGO: Before</h2>
+						<p class="card-desc">Play our first tech demo of the ALTER EGO (that is mostly TDS...) fan game.</p>
+					</div>
+					<div class="card-footer">
+						<span class="card-link">Play Demo<ExternalLink class="link-icon" /></span>
+					</div>
+				</a>
+
+			</div>
+		</section>
+
+		<!-- Discord -->
+		<section class="discord-section">
+			<div class="section-label">Community</div>
+			<div class="discord-layout">
+				<div class="discord-copy">
+					<h2 class="discord-heading">Enter the Asylum!</h2>
+					<p class="discord-sub">Join us and many other Alter Egoists, in the most delusional and unhinged yet also insightful and informative, Discord server!</p>
+					<ul class="discord-perks">
+						<li>What's in there, you may ask? Well, we got:</li>
+						<li>&nbsp;<span class="perk-dot"></span> A welcoming community..!</li>
+						<li>&nbsp;<span class="perk-dot"></span> General tomfoolery...</li>
+						<li>&nbsp;<span class="perk-dot"></span> A lot of crackpot theories...</li>
+						<li>&nbsp;<span class="perk-dot"></span> Random people getting beaten up...</li>
+						<li>&nbsp;<span class="perk-dot"></span> Ocassional philosophical discussions!</li>
+						<li>&nbsp;<span class="perk-dot"></span> The most recent news for ALTER EGO, of course!</li>
+					</ul>
+				</div>
+				<DiscordWidget />
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<span>Not affiliated with Paradoxum Games</span>
+		<a href="https://github.com/paradoxum-wikis/Companio" target="_blank" rel="noopener">Source Code <ExternalLink class="link-icon inline-block"/></a>
+	</footer>
+</div>
+
+<style lang="scss">
+	.page-root {
+		min-height: 100vh;
+		position: relative;
+		overflow-x: hidden;
+	}
+
+	.bg-mesh {
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 0;
+		overflow: hidden;
+	}
+
+	.mesh-orb {
+		position: absolute;
+		border-radius: 50%;
+		filter: blur(80px);
+		opacity: .15;
+	}
+
+	.orb-1 {
+		width: 600px;
+		height: 600px;
+		top: -200px;
+		right: -100px;
+		background: radial-gradient(circle, oklch(.45 .18 20), transparent 70%);
+		animation: drift1 18s ease-out infinite alternate;
+	}
+
+	.orb-2 {
+		width: 500px;
+		height: 500px;
+		bottom: 0;
+		left: -150px;
+		background: radial-gradient(circle, oklch(.35 .12 30), transparent 70%);
+		animation: drift2 22s ease-out infinite alternate;
+	}
+
+	.orb-3 {
+		width: 400px;
+		height: 400px;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: radial-gradient(circle, oklch(.4 .08 350), transparent 70%);
+		animation: drift3 26s ease-out infinite alternate;
+		opacity: .08;
+	}
+
+	@keyframes drift1 { from { transform: translate(0, 0); } to { transform: translate(-40px, 60px); } }
+	@keyframes drift2 { from { transform: translate(0, 0); } to { transform: translate(60px, -40px); } }
+	@keyframes drift3 { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-50%, -50%) scale(1.15); } }
+
+	.grid-lines {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(to right, oklch(.5 .02 35 / .04) 1px, transparent 1px),
+			linear-gradient(to bottom, oklch(.5 .02 35 / .04) 1px, transparent 1px);
+		background-size: 60px 60px;
+	}
+
+	main {
+		position: relative;
+		z-index: 1;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1.5rem 4rem;
+	}
+
+	.hero {
+		text-align: center;
+		padding: 5rem 1rem 1.5rem;
+		animation: fadeUp .7s ease-out both;
+	}
+
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(24px); }
+		to	 { opacity: 1; transform: translateY(0); }
+	}
+
+	.hero-title {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		line-height: 1;
+		margin-bottom: 1.25rem;
+		font-family: var(--font-heading);
+	}
+
+	.hero-title-line1 {
+		font-size: clamp(1.8rem, 5vw, 3rem);
+		font-weight: 700;
+		color: var(--muted-foreground);
+		letter-spacing: -.01em;
+	}
+
+	.hero-title-line2 {
+		font-size: clamp(2.8rem, 9vw, 6rem);
+		font-weight: 800;
+		letter-spacing: -.03em;
+		color: var(--foreground);
+		position: relative;
+		line-height: 1.05;
+
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: -4px;
+			left: 0;
+			right: 0;
+			height: 3px;
+			background: linear-gradient(to right, var(--primary), oklch(.6 .12 20));
+			border-radius: 2px;
+		}
+	}
+
+	.hero-sub {
+		font-size: 1.05rem;
+		color: var(--muted-foreground);
+		max-width: 520px;
+		margin: 1.5rem auto 2rem;
+		line-height: 1.6;
+	}
+
+	.section-label {
+		font-size: .68rem;
+		font-weight: 700;
+		letter-spacing: .18em;
+		text-transform: uppercase;
+		color: var(--primary);
+		margin-bottom: 1.5rem;
+		display: flex;
+		align-items: center;
+		gap: .75rem;
+
+		&::before,
+		&::after {
+			content: '';
+			flex: 1;
+			height: 1px;
+			background: var(--border);
+		}
+
+		&::before {
+			max-width: 2rem;
+		}
+	}
+
+	.cards-section {
+		margin-bottom: 4rem;
+		animation: fadeUp .7s ease-out .15s both;
+	}
+
+	.cards-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: auto auto;
+		gap: 1rem;
+	}
+
+	.card-featured {
+		grid-column: span 2;
+	}
+
+	.card-game {
+		grid-column: span 2;
+	}
+
+	.card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		padding: 1.5rem;
+		border-radius: 12px;
+		border: 1px solid var(--border);
+		background: var(--card);
+		color: var(--card-foreground);
+		text-decoration: none;
+		overflow: hidden;
+		transition: transform .25s, box-shadow .25s, border-color .25s;
+		cursor: pointer;
+		--card-accent: var(--primary);
+
+		&:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 12px 40px oklch(0 0 0 / .15), 0 0 0 1px var(--card-accent);
+			border-color: var(--card-accent);
+			text-decoration: none;
+			color: var(--card-foreground);
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			width: 24px;
+			height: 24px;
+			background: var(--background);
+			clip-path: polygon(100% 0, 0% 100%, 100% 100%);
+			opacity: .5;
+		}
+	}
+
+	.card-recap		  { --card-accent: oklch(.55 .18 20);	}
+	.card-deathbattle { --card-accent: oklch(.55 .15 60);	}
+	.card-resources	  { --card-accent: oklch(.5 .1 220);   }
+	.card-wiki		  { --card-accent: oklch(.55 .15 140); }
+	.card-twitter	  { --card-accent: oklch(.55 .05 220); }
+	.card-game		  { --card-accent: oklch(.55 .15 300); }
+
+	.card-accent-bar {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: linear-gradient(
+			to right,
+			transparent 0%,
+			var(--card-accent) 30%,
+			var(--card-accent) 70%,
+			transparent 100%
+		);
+		opacity: 0;
+		transition: opacity .25s;
+
+		.card:hover & {
+			opacity: 1;
+		}
+	}
+
+	.card-icon-row {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		margin-bottom: 1rem;
+	}
+
+	.card-icon {
+		width: 40px;
+		height: 40px;
+		border-radius: 8px;
+		background: oklch(from var(--card-accent) l c h / .12);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--card-accent);
+		transition: background .2s;
+		flex-shrink: 0;
+
+		.card:hover & {
+			background: oklch(from var(--card-accent) l c h / .2);
+		}
+	}
+
+	.card-badge {
+		font-size: .65rem;
+		font-weight: 700;
+		letter-spacing: .1em;
+		text-transform: uppercase;
+		padding: .2rem .5rem;
+		border-radius: 4px;
+		background: oklch(from var(--card-accent) l c h / .12);
+		color: var(--card-accent);
+	}
+
+	.card-badge-info {
+		background: var(--muted);
+		color: var(--muted-foreground);
+	}
+
+	.card-body {
+		flex: 1;
+	}
+
+	.card-title {
+		font-size: 1.05rem;
+		font-weight: 700;
+		color: var(--foreground);
+		margin: 0 0 .4rem;
+		font-family: var(--font-heading);
+		letter-spacing: -.01em;
+		line-height: 1.2;
+
+		.card-featured & {
+			font-size: 1.4rem;
+		}
+	}
+
+	.card-desc {
+		font-size: .85rem;
+		color: var(--muted-foreground);
+		line-height: 1.55;
+		margin: 0;
+	}
+
+	.card-footer {
+		margin-top: 1.25rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--border);
+	}
+
+	.card-link {
+		display: inline-flex;
+		align-items: center;
+		gap: .3rem;
+		font-size: .82rem;
+		font-weight: 600;
+		color: var(--card-accent);
+		transition: gap .2s;
+
+		.card:hover & {
+			gap: .5rem;
+		}
+	}
+
+	:global(.link-icon) {
+		width: 14px;
+		height: 14px;
+		flex-shrink: 0;
+	}
+
+	.discord-section {
+		animation: fadeUp .7s ease-out .3s both;
+	}
+
+	.discord-layout {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 3rem;
+		align-items: start;
+	}
+
+	.discord-heading {
+		font-size: 1.75rem;
+		font-weight: 800;
+		font-family: var(--font-heading);
+		letter-spacing: -.02em;
+		margin: 0 0 .75rem;
+		line-height: 1.15;
+	}
+
+	.discord-sub {
+		font-size: .9rem;
+		color: var(--muted-foreground);
+		line-height: 1.6;
+		margin: 0 0 1.5rem;
+	}
+
+	.discord-perks {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: .6rem;
+
+		li {
+			display: flex;
+			align-items: center;
+			gap: .6rem;
+			font-size: .875rem;
+			color: var(--muted-foreground);
+		}
+	}
+
+	.perk-dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--primary);
+		flex-shrink: 0;
+	}
+
+	.site-footer {
+		position: relative;
+		z-index: 1;
+		border-top: 1px solid var(--border);
+		padding: 1.5rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: .78rem;
+		color: var(--muted-foreground);
+		max-width: 1200px;
+		margin: 0 auto;
+
+		a {
+			color: var(--muted-foreground);
+			text-decoration: none;
+			transition: color .2s;
+
+			&:hover {
+				color: var(--foreground);
+			}
+		}
+	}
+
+	@media (max-width: 900px) {
+		.cards-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.card-featured,
+		.card-game {
+			grid-column: span 2;
+		}
+
+		.discord-layout {
+			grid-template-columns: 1fr;
+			gap: 2rem;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.cards-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.card-featured,
+		.card-game {
+			grid-column: span 1;
+		}
+	}
+</style>

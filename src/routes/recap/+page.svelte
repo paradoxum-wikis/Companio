@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy } from "svelte";
+	import { onMount } from "svelte";
 	import { RecapService } from "../../components/recapService.js";
 	import type { RecapData } from "../../types.js";
 	import "./recap.css";

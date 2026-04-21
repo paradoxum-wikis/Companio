@@ -39,6 +39,7 @@
 		edits: { label: "Edits", color: "var(--chart-3)" },
 	} satisfies Chart.ChartConfig;
 
+	let wikiMode = $state<"aew" | "tdsw">("aew");
 	let currentDate = $state("");
 	let prevDisabled = $state(false);
 	let nextDisabled = $state(true);
@@ -80,6 +81,12 @@
 
 	function getPaletteColor(i: number) {
 		return palette[i % palette.length];
+	}
+
+	async function handleModeSwitch() {
+		currentDate = await RecapService.getCurrentWeekDate(wikiMode, true);
+		RecapService.updateUrlWithDate(currentDate, wikiMode);
+		loadRecapData();
 	}
 
 	function countUp(node: HTMLElement, target: string | number) {
@@ -260,25 +267,39 @@
 	});
 
 	async function init() {
-		currentDate = await RecapService.getCurrentWeekDate();
+		const params = new URLSearchParams(window.location.search);
+		const wikiParam = params.get("wiki");
+		if (wikiParam === "aew" || wikiParam === "tdsw") {
+			wikiMode = wikiParam;
+		}
+
+		currentDate = await RecapService.getCurrentWeekDate(wikiMode);
 		loadRecapData();
 	}
 
-	async function navigateWeek(direction: "prev" | "next") {
-		currentDate =
-			direction === "prev"
-				? await RecapService.getPreviousDate(currentDate)
-				: await RecapService.getNextDate(currentDate);
-		RecapService.updateUrlWithDate(currentDate);
+	async function navigateWeek(direction: "prev" | "next"): Promise<void> {
+		if (direction === "prev") {
+			currentDate = await RecapService.getPreviousDate(
+				wikiMode,
+				currentDate,
+			);
+		} else {
+			currentDate = await RecapService.getNextDate(wikiMode, currentDate);
+		}
+
+		RecapService.updateUrlWithDate(currentDate, wikiMode);
 		loadRecapData();
 	}
 
-	async function loadRecapData() {
+	async function loadRecapData(): Promise<void> {
 		loading = true;
 		errorMessage = null;
 		updateNavigationButtons();
 		try {
-			recapData = await RecapService.fetchRecapData(currentDate);
+			recapData = await RecapService.fetchRecapData(
+				wikiMode,
+				currentDate,
+			);
 		} catch (error) {
 			errorMessage =
 				error instanceof Error
@@ -292,8 +313,8 @@
 		}
 	}
 
-	async function updateNavigationButtons() {
-		const dates = await RecapService.getAvailableDates();
+	async function updateNavigationButtons(): Promise<void> {
+		const dates = await RecapService.getAvailableDates(wikiMode);
 		if (dates.length > 0) {
 			const idx = dates.indexOf(currentDate);
 			if (idx === -1) {
@@ -319,7 +340,12 @@
 	}
 
 	async function handlePopstate() {
-		currentDate = await RecapService.getCurrentWeekDate();
+		const params = new URLSearchParams(window.location.search);
+		const wikiParam = params.get("wiki");
+		if (wikiParam === "aew" || wikiParam === "tdsw") {
+			wikiMode = wikiParam;
+		}
+		currentDate = await RecapService.getCurrentWeekDate(wikiMode);
 		loadRecapData();
 	}
 
@@ -392,6 +418,15 @@
 				Weekly Contributor Leaderboard
 			</h1>
 			<div class="nav-controls">
+				<select
+					class="nav-btn"
+					bind:value={wikiMode}
+					onchange={() => handleModeSwitch()}
+					aria-label="Select Wiki"
+				>
+					<option value="aew">ALTER EGO</option>
+					<option value="tdsw">Tower Defense Simulator</option>
+				</select>
 				<button
 					class="nav-btn"
 					disabled={prevDisabled}

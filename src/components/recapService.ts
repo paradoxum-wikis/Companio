@@ -1,18 +1,22 @@
 import type { RecapData, DateInfo } from "../types.js";
 
+export type WikiMode = "aew" | "tdsw";
+
 export class RecapService {
-	private static readonly GITHUB_API_BASE =
-		"https://api.github.com/repos/paradoxum-wikis/automation/contents/data/recap/aew";
-	private static readonly GITHUB_RAW_BASE =
-		"https://raw.githubusercontent.com/paradoxum-wikis/automation/main/data/recap/aew";
+	private static availableFiles: Record<WikiMode, Set<string> | null> = {
+		aew: null,
+		tdsw: null,
+	};
 
-	private static readonly CACHE_KEY_PREFIX = "aewiki-recap-";
-	private static readonly INDEX_CACHE_KEY = "aewiki-available-files-v3";
-	private static readonly INDEX_CACHE_DURATION = 1 * 24 * 60 * 60 * 1000; // 1 day
+	private static getApiBase(wiki: WikiMode) {
+		return `https://api.github.com/repos/paradoxum-wikis/automation/contents/data/recap/${wiki}`;
+	}
+	private static getRawBase(wiki: WikiMode) {
+		return `https://raw.githubusercontent.com/paradoxum-wikis/automation/main/data/recap/${wiki}`;
+	}
 
-	private static availableFiles: Set<string> | null = null;
-
-	static isLegacyFormat(dateString: string): boolean {
+	static isLegacyFormat(wiki: WikiMode, dateString: string): boolean {
+		if (wiki === "tdsw") return false;
 		return dateString <= "2026-04-12";
 	}
 
@@ -47,13 +51,20 @@ export class RecapService {
 		return this.addDays(dateString, -days);
 	}
 
-	private static getCacheKey(dateString: string): string {
-		return `${this.CACHE_KEY_PREFIX}${dateString}`;
+	private static getCacheKey(wiki: WikiMode, dateString: string): string {
+		return `${wiki}-recap-${dateString}`;
 	}
 
-	private static getCachedData(dateString: string): RecapData | null {
+	private static getIndexCacheKey(wiki: WikiMode): string {
+		return `${wiki}-available-files-v3`;
+	}
+
+	private static getCachedData(
+		wiki: WikiMode,
+		dateString: string,
+	): RecapData | null {
 		try {
-			const cacheKey = this.getCacheKey(dateString);
+			const cacheKey = this.getCacheKey(wiki, dateString);
 			const cached = localStorage.getItem(cacheKey);
 			if (!cached) return null;
 			return JSON.parse(cached);
@@ -62,9 +73,16 @@ export class RecapService {
 		}
 	}
 
-	private static setCachedData(dateString: string, data: any): void {
+	private static setCachedData(
+		wiki: WikiMode,
+		dateString: string,
+		data: any,
+	): void {
 		try {
-			localStorage.setItem(this.getCacheKey(dateString), JSON.stringify(data));
+			localStorage.setItem(
+				this.getCacheKey(wiki, dateString),
+				JSON.stringify(data),
+			);
 		} catch (error) {
 			this.clearOldestEntries();
 		}
@@ -75,14 +93,13 @@ export class RecapService {
 			const cacheEntries: { key: string; date: string }[] = [];
 			for (let i = 0; i < localStorage.length; i++) {
 				const key = localStorage.key(i);
-				if (key && key.startsWith(this.CACHE_KEY_PREFIX)) {
-					cacheEntries.push({
-						key,
-						date: key.replace(this.CACHE_KEY_PREFIX, ""),
-					});
+				if (
+					key &&
+					(key.startsWith("aew-recap-") || key.startsWith("tdsw-recap-"))
+				) {
+					cacheEntries.push({ key, date: key });
 				}
 			}
-			cacheEntries.sort((a, b) => a.date.localeCompare(b.date));
 			const entriesToRemove = Math.ceil(cacheEntries.length * 0.25);
 			for (let i = 0; i < entriesToRemove && i < cacheEntries.length; i++) {
 				localStorage.removeItem(cacheEntries[i].key);
@@ -90,18 +107,21 @@ export class RecapService {
 		} catch (error) {}
 	}
 
-	private static async fetchAvailableFiles(): Promise<Set<string>> {
+	private static async fetchAvailableFiles(
+		wiki: WikiMode,
+	): Promise<Set<string>> {
 		try {
-			const cached = localStorage.getItem(this.INDEX_CACHE_KEY);
+			const indexKey = this.getIndexCacheKey(wiki);
+			const cached = localStorage.getItem(indexKey);
 			if (cached) {
 				const { timestamp, files } = JSON.parse(cached);
-				if (Date.now() - timestamp < this.INDEX_CACHE_DURATION) {
+				if (Date.now() - timestamp < 1 * 24 * 60 * 60 * 1000) {
 					return new Set(files);
 				}
 			}
 
 			const availableFiles = new Set<string>();
-			const rootResponse = await fetch(this.GITHUB_API_BASE);
+			const rootResponse = await fetch(this.getApiBase(wiki));
 			if (!rootResponse.ok)
 				throw new Error(`Failed to fetch root: ${rootResponse.status}`);
 			const rootData = await rootResponse.json();
@@ -127,7 +147,6 @@ export class RecapService {
 				const legacyRes = await fetch(legacyFolder.url);
 				if (legacyRes.ok) {
 					const legacyData = await legacyRes.json();
-
 					legacyData.forEach((item: any) => {
 						if (item.type === "file") {
 							const match = item.name.match(
@@ -158,7 +177,7 @@ export class RecapService {
 
 			try {
 				localStorage.setItem(
-					this.INDEX_CACHE_KEY,
+					indexKey,
 					JSON.stringify({
 						timestamp: Date.now(),
 						files: Array.from(availableFiles),
@@ -172,67 +191,75 @@ export class RecapService {
 		}
 	}
 
-	private static async ensureAvailableFiles(): Promise<void> {
-		if (!this.availableFiles) {
-			this.availableFiles = await this.fetchAvailableFiles();
+	private static async ensureAvailableFiles(wiki: WikiMode): Promise<void> {
+		if (!this.availableFiles[wiki]) {
+			this.availableFiles[wiki] = await this.fetchAvailableFiles(wiki);
 		}
 	}
 
-	static async getAvailableDates(): Promise<string[]> {
-		await this.ensureAvailableFiles();
-		return this.availableFiles ? Array.from(this.availableFiles).sort() : [];
+	static async getAvailableDates(wiki: WikiMode): Promise<string[]> {
+		await this.ensureAvailableFiles(wiki);
+		const files = this.availableFiles[wiki];
+		return files ? Array.from(files).sort() : [];
 	}
 
-	static async getPreviousDate(currentDate: string): Promise<string> {
-		const dates = await this.getAvailableDates();
+	static async getPreviousDate(
+		wiki: WikiMode,
+		currentDate: string,
+	): Promise<string> {
+		const dates = await this.getAvailableDates(wiki);
 		if (dates.length === 0) return this.subtractDays(currentDate, 7);
 		const prev = [...dates].reverse().find((d) => d < currentDate);
 		return prev || this.subtractDays(currentDate, 7);
 	}
 
-	static async getNextDate(currentDate: string): Promise<string> {
-		const dates = await this.getAvailableDates();
+	static async getNextDate(
+		wiki: WikiMode,
+		currentDate: string,
+	): Promise<string> {
+		const dates = await this.getAvailableDates(wiki);
 		if (dates.length === 0) return this.addDays(currentDate, 7);
 		const next = dates.find((d) => d > currentDate);
 		return next || this.addDays(currentDate, 7);
 	}
 
-	static async fetchRecapData(dateString: string): Promise<any> {
-		const cachedData = this.getCachedData(dateString);
+	static async fetchRecapData(
+		wiki: WikiMode,
+		dateString: string,
+	): Promise<any> {
+		const cachedData = this.getCachedData(wiki, dateString);
 		if (cachedData) return cachedData;
 
 		const { year } = this.parseDate(dateString);
-		const isLegacy = this.isLegacyFormat(dateString);
+		const isLegacy = this.isLegacyFormat(wiki, dateString);
 
 		try {
 			if (isLegacy) {
 				const filename = `recap-${dateString}.json`;
-				const yearUrl = `${this.GITHUB_RAW_BASE}/legacy/${year}/${filename}`;
-				const directUrl = `${this.GITHUB_RAW_BASE}/legacy/${filename}`;
+				const yearUrl = `${this.getRawBase(wiki)}/legacy/${year}/${filename}`;
+				const directUrl = `${this.getRawBase(wiki)}/legacy/${filename}`;
 
 				let response = await fetch(yearUrl);
-				if (!response.ok) {
-					response = await fetch(directUrl);
-				}
-
+				if (!response.ok) response = await fetch(directUrl);
 				if (!response.ok) throw new Error(`Failed to fetch legacy data`);
-				const data = await response.json();
 
-				this.setCachedData(dateString, data);
+				const data = await response.json();
+				this.setCachedData(wiki, dateString, data);
 				return data;
 			} else {
-				const summaryUrl = `${this.GITHUB_RAW_BASE}/${year}/${dateString}.json`;
-				const rawUrl = `${this.GITHUB_RAW_BASE}/${year}/${dateString}.raw.json`;
+				const summaryUrl = `${this.getRawBase(wiki)}/${year}/${dateString}.json`;
+				const rawUrl = `${this.getRawBase(wiki)}/${year}/${dateString}.raw.json`;
 
 				const [summaryRes, rawRes] = await Promise.all([
 					fetch(summaryUrl),
-					fetch(rawUrl),
+					fetch(rawUrl).catch(() => null),
 				]);
-				if (!summaryRes.ok || !rawRes.ok)
+
+				if (!summaryRes.ok)
 					throw new Error("Failed to fetch modern recap data");
 
 				const summary = await summaryRes.json();
-				const rawData = await rawRes.json();
+				const rawData = rawRes && rawRes.ok ? await rawRes.json() : [];
 
 				const contributors = Object.entries(summary.counts)
 					.map(([name, count]) => {
@@ -259,7 +286,7 @@ export class RecapService {
 					rawData: rawData,
 				};
 
-				this.setCachedData(dateString, data);
+				this.setCachedData(wiki, dateString, data);
 				return data;
 			}
 		} catch (error) {
@@ -268,35 +295,51 @@ export class RecapService {
 	}
 
 	static extractAvatarUrl(avatarSource: string): string {
-		if (!avatarSource)
-			return "https://vignette.wikia.nocookie.net/messaging/images/1/19/Avatar.jpg";
-		if (avatarSource.startsWith("http")) return avatarSource;
-		const imgMatch = avatarSource.match(/src="([^"]+)"/);
-		if (imgMatch && imgMatch[1]) {
-			return imgMatch[1].replace(
-				/width\/36\/height\/36/,
-				"width/128/height/128",
-			);
+		const fallbackAvatar =
+			"https://vignette.wikia.nocookie.net/messaging/images/1/19/Avatar.jpg";
+		if (!avatarSource) return fallbackAvatar;
+
+		let extractedUrl = "";
+		if (avatarSource.startsWith("http")) {
+			extractedUrl = avatarSource;
+		} else {
+			const imgMatch = avatarSource.match(/src="([^"]+)"/);
+			if (imgMatch && imgMatch[1]) {
+				extractedUrl = imgMatch[1];
+			} else {
+				return fallbackAvatar;
+			}
 		}
-		return "https://vignette.wikia.nocookie.net/messaging/images/1/19/Avatar.jpg";
+
+		return extractedUrl.replace(
+			/width\/\d+\/height\/\d+/,
+			"width/128/height/128",
+		);
 	}
 
-	static async getCurrentWeekDate(): Promise<string> {
-		const urlParams = new URLSearchParams(window.location.search);
-		const dateParam = urlParams.get("date");
-		if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) return dateParam;
+	static async getCurrentWeekDate(
+		wiki: WikiMode,
+		forceLatest = false,
+	): Promise<string> {
+		if (!forceLatest) {
+			const urlParams = new URLSearchParams(window.location.search);
+			const dateParam = urlParams.get("date");
+			if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) return dateParam;
+		}
 
-		await this.ensureAvailableFiles();
-		if (this.availableFiles && this.availableFiles.size > 0) {
-			const sortedDates = Array.from(this.availableFiles).sort().reverse();
+		await this.ensureAvailableFiles(wiki);
+		const files = this.availableFiles[wiki];
+		if (files && files.size > 0) {
+			const sortedDates = Array.from(files).sort().reverse();
 			return sortedDates[0];
 		}
 		return this.formatDate(new Date());
 	}
 
-	static updateUrlWithDate(dateString: string): void {
+	static updateUrlWithDate(dateString: string, wiki: WikiMode): void {
 		const url = new URL(window.location.href);
 		url.searchParams.set("date", dateString);
+		url.searchParams.set("wiki", wiki);
 		window.history.pushState({}, "", url.toString());
 	}
 }

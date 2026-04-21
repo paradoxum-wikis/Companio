@@ -54,6 +54,17 @@
 		) ?? 0,
 	);
 
+	let top3Impact = $derived.by(() => {
+		if (!recapData?.contributors?.length || totalContributions === 0)
+			return "0%";
+
+		const top3Sum = recapData.contributors
+			.slice(0, 3)
+			.reduce((sum, c) => sum + Number(c.contributions), 0);
+
+		return Math.round((top3Sum / totalContributions) * 100) + "%";
+	});
+
 	let averagePerUser = $derived(
 		recapData?.contributors?.length
 			? Math.round(totalContributions / recapData.contributors.length)
@@ -489,9 +500,9 @@
 						<div class="card-icon"><ChartColumn /></div>
 					</div>
 					<div class="card-body">
-						<h2 class="card-title">Total Contributions</h2>
+						<h2 class="card-title">Top 3's Impact</h2>
 						<p class="card-desc stat-value">
-							{recapData ? totalContributions : "-"}
+							{recapData ? top3Impact : "-"}
 						</p>
 					</div>
 				</div>

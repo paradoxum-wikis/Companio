@@ -8,7 +8,6 @@ export interface Contributor {
 	isCurrent: boolean;
 	contributions: string;
 	latestRevision: string | null;
-	contributionsText: string;
 	index: number;
 }
 

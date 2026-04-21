@@ -273,7 +273,6 @@ export class RecapService {
 							userId: "N/A",
 							avatar: avatar,
 							contributions: count as number,
-							contributionsText: "contributions",
 							isAdmin: false,
 						};
 					})

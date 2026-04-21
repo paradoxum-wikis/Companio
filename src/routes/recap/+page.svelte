@@ -653,8 +653,9 @@
 										</div>
 										<small
 											class="text-muted-foreground contributions-text text-xs"
-											>{contributor.contributionsText}</small
 										>
+											contributions
+										</small>
 									</div>
 								</button>
 							{/each}

@@ -217,7 +217,7 @@
 			{ type: "Edit", count: typeEdit, color: "var(--chart-1)" },
 			{ type: "New Page", count: typeNew, color: "var(--chart-2)" },
 			{ type: "Upload", count: typeUpload, color: "var(--chart-3)" },
-			{ type: "Removal", count: typeRemoval, color: "var(--chart-4)" },
+			{ type: "Delete", count: typeRemoval, color: "var(--chart-4)" },
 		].filter((d) => d.count > 0);
 		const editTypeConfig = {
 			count: { label: "Count" },
@@ -697,9 +697,6 @@
 			<Card.Root class="mb-4">
 				<Card.Header class="pb-2">
 					<Card.Title>Edits per Day</Card.Title>
-					<Card.Description
-						>Edit activity across this week</Card.Description
-					>
 				</Card.Header>
 				<Card.Content>
 					<Chart.Container
@@ -741,9 +738,6 @@
 				<Card.Root>
 					<Card.Header class="pb-2">
 						<Card.Title>Edits by Hour</Card.Title>
-						<Card.Description
-							>When edits happen during the day</Card.Description
-						>
 					</Card.Header>
 					<Card.Content>
 						<Chart.Container
@@ -796,9 +790,6 @@
 				<Card.Root class="flex flex-col">
 					<Card.Header class="pb-2 items-center">
 						<Card.Title>Namespace Breakdown</Card.Title>
-						<Card.Description
-							>Where edits are concentrated</Card.Description
-						>
 					</Card.Header>
 					<Card.Content class="flex-1">
 						<Chart.Container
@@ -862,9 +853,6 @@
 				<Card.Root class="flex flex-col">
 					<Card.Header class="pb-2 items-center">
 						<Card.Title>Edit Types</Card.Title>
-						<Card.Description
-							>Regular edits, new pages, uploads, removals</Card.Description
-						>
 					</Card.Header>
 					<Card.Content class="flex-1">
 						<Chart.Container
@@ -926,9 +914,6 @@
 				<Card.Root>
 					<Card.Header class="pb-2">
 						<Card.Title>Top Edited Pages</Card.Title>
-						<Card.Description
-							>Most frequently touched pages this week</Card.Description
-						>
 					</Card.Header>
 					<Card.Content>
 						<Chart.Container

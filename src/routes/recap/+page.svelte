@@ -421,7 +421,7 @@
 		<div class="grid-lines"></div>
 	</div>
 
-	<main>
+	<main class="page-enter">
 		<!-- Header -->
 		<div class="recap-header">
 			<h1 class="header-title">
@@ -1017,7 +1017,6 @@
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 0 1.5rem 4rem;
-		animation: fadeUp 0.7s ease-out both;
 	}
 
 	.recap-header {

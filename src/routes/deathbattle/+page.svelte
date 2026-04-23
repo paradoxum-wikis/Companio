@@ -180,7 +180,7 @@
 		<div class="grid-lines"></div>
 	</div>
 
-	<main>
+	<main class="page-enter">
 		<header class="page-header">
 			<div>
 				<h1>

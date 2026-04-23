@@ -223,7 +223,7 @@
 		<div class="grid-lines"></div>
 	</div>
 
-	<main>
+	<main class="page-enter">
 		<HeroSection {currentGame} />
 
 		<section class="utility-shell">

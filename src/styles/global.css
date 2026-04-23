@@ -102,6 +102,10 @@
 	}
 }
 
+main.page-enter {
+	animation: fadeUp 0.7s ease-out both;
+}
+
 .tds-icon-well {
 	width: 2.5rem;
 	height: 2.5rem;

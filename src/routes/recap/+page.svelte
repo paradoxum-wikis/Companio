@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { RecapService } from "$lib/recapService.js";
+	import { RecapService } from "$lib/recap/service.js";
 	import type { RecapData } from "../../types.js";
 	import "./recap.css";
 

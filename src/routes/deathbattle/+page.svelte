@@ -17,7 +17,7 @@
 	import * as Card from "$lib/components/ui/card/index.js";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import StatCard from "$lib/components/StatCard.svelte";
-	import { DeathBattleService } from "$lib/deathBattleService.js";
+	import { DeathBattleService } from "$lib/deathbattle/service.js";
 	import type { BattleStats, BattleRecord } from "../../types.js";
 
 	type Tab = "normal" | "ranked" | "records";
@@ -187,7 +187,10 @@
 					<Zap class="title-icon" />
 					Deathbattle Statistics
 				</h1>
-				<p>Combat stats from the ALTERSHAPER Discord bot.</p>
+				<p>
+					The folks here sure love beating the crap out of each other
+					huh...
+				</p>
 			</div>
 		</header>
 
@@ -223,17 +226,26 @@
 
 		{#if activeTab === "normal"}
 			<section class="tab-panel">
-			<div class="stat-grid">
-				<StatCard label="Total Players" value={loadingStats ? "-" : normalStats.totalPlayers}>
-					<Users />
-				</StatCard>
-				<StatCard label="Total Battles" value={loadingStats ? "-" : normalStats.totalBattles}>
-					<Swords />
-				</StatCard>
-				<StatCard label="Last Battle" value={loadingStats ? "-" : normalStats.lastBattle}>
-					<Calendar />
-				</StatCard>
-			</div>
+				<div class="stat-grid">
+					<StatCard
+						label="Total Players"
+						value={loadingStats ? "-" : normalStats.totalPlayers}
+					>
+						<Users />
+					</StatCard>
+					<StatCard
+						label="Total Battles"
+						value={loadingStats ? "-" : normalStats.totalBattles}
+					>
+						<Swords />
+					</StatCard>
+					<StatCard
+						label="Last Battle"
+						value={loadingStats ? "-" : normalStats.lastBattle}
+					>
+						<Calendar />
+					</StatCard>
+				</div>
 
 				<Card.Root>
 					<Card.Header>
@@ -328,17 +340,26 @@
 			</section>
 		{:else if activeTab === "ranked"}
 			<section class="tab-panel">
-			<div class="stat-grid">
-				<StatCard label="Total Players" value={loadingStats ? "-" : rankedStats.totalPlayers}>
-					<Users />
-				</StatCard>
-				<StatCard label="Total Battles" value={loadingStats ? "-" : rankedStats.totalBattles}>
-					<Trophy />
-				</StatCard>
-				<StatCard label="Last Battle" value={loadingStats ? "-" : rankedStats.lastBattle}>
-					<Calendar />
-				</StatCard>
-			</div>
+				<div class="stat-grid">
+					<StatCard
+						label="Total Players"
+						value={loadingStats ? "-" : rankedStats.totalPlayers}
+					>
+						<Users />
+					</StatCard>
+					<StatCard
+						label="Total Battles"
+						value={loadingStats ? "-" : rankedStats.totalBattles}
+					>
+						<Trophy />
+					</StatCard>
+					<StatCard
+						label="Last Battle"
+						value={loadingStats ? "-" : rankedStats.lastBattle}
+					>
+						<Calendar />
+					</StatCard>
+				</div>
 
 				<Card.Root>
 					<Card.Header>

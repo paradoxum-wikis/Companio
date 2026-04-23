@@ -1,4 +1,4 @@
-import type { BattleStats, BattleRecord } from "../types.js";
+import type { BattleStats, BattleRecord } from "../../types.js";
 
 export class DeathBattleService {
 	private static readonly STATS_API =

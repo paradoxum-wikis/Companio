@@ -3,8 +3,7 @@
 	import "../styles/global.css";
 
 	import { ModeWatcher, toggleMode } from "mode-watcher";
-	import SunIcon from "@lucide/svelte/icons/sun";
-	import MoonIcon from "@lucide/svelte/icons/moon";
+	import { SunIcon, MoonIcon, CodeXml } from "@lucide/svelte";
 
 	let { children } = $props();
 </script>
@@ -43,3 +42,15 @@
 </nav>
 
 {@render children()}
+
+<footer class="site-footer">
+	<span>Not affiliated with Paradoxum Games</span>
+	<a
+		href="https://github.com/paradoxum-wikis/Companio"
+		target="_blank"
+		rel="noopener noreferrer"
+	>
+		Source Code
+		<CodeXml aria-hidden="true" />
+	</a>
+</footer>

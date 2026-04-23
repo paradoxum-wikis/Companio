@@ -325,16 +325,6 @@
 			</div>
 		</section>
 	</main>
-
-	<footer class="site-footer">
-		<span>Not affiliated with Paradoxum Games</span>
-		<a
-			href="https://github.com/paradoxum-wikis/Companio"
-			target="_blank"
-			rel="noopener"
-			>Source Code <ExternalLink class="link-icon inline-block" /></a
-		>
-	</footer>
 </div>
 
 <style lang="scss">
@@ -777,30 +767,6 @@
 		border-radius: 50%;
 		background: var(--primary);
 		flex-shrink: 0;
-	}
-
-	.site-footer {
-		position: relative;
-		z-index: 1;
-		border-top: 1px solid var(--border);
-		padding: 1.5rem;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		font-size: 0.78rem;
-		color: var(--muted-foreground);
-		max-width: 1200px;
-		margin: 0 auto;
-
-		a {
-			color: var(--muted-foreground);
-			text-decoration: none;
-			transition: color 0.2s;
-
-			&:hover {
-				color: var(--foreground);
-			}
-		}
 	}
 
 	@media (max-width: 900px) {

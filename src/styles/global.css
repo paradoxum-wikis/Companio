@@ -132,3 +132,40 @@
 .tds-inline-title--center {
 	align-items: center;
 }
+
+.site-footer {
+	position: relative;
+	z-index: 1;
+	border-top: 1px solid var(--border);
+	padding: 1.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.75rem 1rem;
+	font-size: 0.78rem;
+	color: var(--muted-foreground);
+	max-width: 1200px;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.site-footer a {
+	color: var(--muted-foreground);
+	text-decoration: none;
+	transition: color 0.2s;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+}
+
+.site-footer a:hover {
+	color: var(--foreground);
+}
+
+.site-footer a svg {
+	width: 0.95rem;
+	height: 0.95rem;
+	flex-shrink: 0;
+	opacity: 0.85;
+}

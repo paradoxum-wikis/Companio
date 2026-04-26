@@ -14,6 +14,12 @@
 	<link rel="apple-touch-icon" href="/favicon.png" />
 	<link rel="icon" type="image/png" href="/favicon.png" />
 	<meta name="theme-color" content="#900c3f" />
+	<meta name="apple-mobile-web-app-title" content="AEWiki Companion" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta
+		name="apple-mobile-web-app-status-bar-style"
+		content="black-translucent"
+	/>
 </svelte:head>
 
 <nav class="w-full bg-primary text-white shadow-md sticky top-0 z-50">

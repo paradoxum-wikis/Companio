@@ -51,13 +51,7 @@
 		name="twitter:image:alt"
 		content="ALTER EGO Wiki - Join our community"
 	/>
-	<meta name="theme-color" content="#900c3f" />
-	<meta name="apple-mobile-web-app-title" content="AEWiki Companion" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta
-		name="apple-mobile-web-app-status-bar-style"
-		content="black-translucent"
-	/>
+
 	<link rel="canonical" href="https://ae.tds-editor.com/" />
 </svelte:head>
 

@@ -94,6 +94,14 @@
 		return palette[i % palette.length];
 	}
 
+	function getUserProfileUrl(userName: string): string {
+		const base =
+			wikiMode === "tdsw"
+				? "https://tds.fandom.com/wiki/User:"
+				: "https://alter-ego.fandom.com/wiki/User:";
+		return `${base}${encodeURIComponent(userName)}`;
+	}
+
 	async function handleModeSwitch() {
 		currentDate = await RecapService.getCurrentWeekDate(wikiMode, true);
 		RecapService.updateUrlWithDate(currentDate, wikiMode);
@@ -572,7 +580,7 @@
 									class="leaderboard-item text-left flex items-center gap-4 w-full cursor-pointer hover:bg-muted/50 transition-colors border-b border-border p-4 last:border-0"
 									onclick={() =>
 										window.open(
-											`https://alter-ego.fandom.com/wiki/User:${encodeURIComponent(contributor.userName)}`,
+											getUserProfileUrl(contributor.userName),
 											"_blank",
 										)}
 								>

@@ -101,29 +101,55 @@ export class RecapService {
 
 		for (let i = 0; i < usersToFetch.length; i += chunkSize) {
 			const batch = usersToFetch.slice(i, i + chunkSize);
-			const detailsUrl = `${baseUrl}/api/v1/User/Details?ids=${encodeURIComponent(batch.join(","))}`;
-			const proxiedDetailsUrl = `${this.proxyBase}${detailsUrl}`;
+			const usersUrl = `${baseUrl}/api.php?action=query&list=users&ususers=${encodeURIComponent(batch.join("|"))}&format=json`;
+			const proxiedUsersUrl = `${this.proxyBase}${encodeURIComponent(usersUrl)}`;
 
 			try {
-				const response = await fetch(proxiedDetailsUrl);
-				if (!response.ok) continue;
-				const data = await response.json();
-				const items = data?.items;
+				const usersResponse = await fetch(proxiedUsersUrl);
+				if (!usersResponse.ok) continue;
+				const usersData = await usersResponse.json();
+				const users = usersData?.query?.users;
+				if (!Array.isArray(users)) continue;
+
+				const idToName = new Map<string, string>();
+				for (const user of users) {
+					if (
+						typeof user?.name === "string" &&
+						typeof user?.userid === "number"
+					) {
+						idToName.set(String(user.userid), user.name);
+					}
+				}
+
+				const ids = Array.from(idToName.keys());
+				if (ids.length === 0) continue;
+
+				const detailsUrl = `${baseUrl}/wikia.php?controller=UserApi&method=getDetails&ids=${ids.join(",")}&format=json`;
+				const proxiedDetailsUrl = `${this.proxyBase}${encodeURIComponent(detailsUrl)}`;
+				const detailsResponse = await fetch(proxiedDetailsUrl);
+				if (!detailsResponse.ok) continue;
+				const detailsData = await detailsResponse.json();
+				const items = detailsData?.items;
 				if (!Array.isArray(items)) continue;
 
 				for (const item of items) {
 					if (
-						typeof item?.name === "string" &&
 						typeof item?.user_id === "number" &&
 						typeof item?.avatar === "string"
 					) {
-						cache[item.name] = {
-							userId: String(item.user_id),
+						const userId = String(item.user_id);
+						const name =
+							(typeof item?.name === "string" && item.name) ||
+							idToName.get(userId);
+						if (!name) continue;
+
+						cache[name] = {
+							userId,
 							avatar: item.avatar,
 							cachedAt: now,
 						};
-						usersByName.set(item.name, {
-							userId: String(item.user_id),
+						usersByName.set(name, {
+							userId,
 							avatar: item.avatar,
 						});
 					}

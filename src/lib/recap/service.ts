@@ -3,6 +3,10 @@ import type { RecapData, DateInfo } from "../../types.js";
 export type WikiMode = "aew" | "tdsw";
 
 export class RecapService {
+	static readonly fallbackAvatar =
+		"https://vignette.wikia.nocookie.net/messaging/images/1/19/Avatar.jpg";
+	private static readonly proxyBase = "https://api.tds-editor.com/?url=";
+
 	private static availableFiles: Record<WikiMode, Set<string> | null> = {
 		aew: null,
 		tdsw: null,
@@ -56,7 +60,48 @@ export class RecapService {
 	}
 
 	private static getIndexCacheKey(wiki: WikiMode): string {
-		return `${wiki}-available-files-v4`;
+		return `${wiki}-available-files-v5`;
+	}
+
+	private static async fetchModernUsersByNames(
+		userNames: string[],
+	): Promise<Map<string, { userId: string; avatar: string }>> {
+		if (userNames.length === 0) return new Map();
+
+		const baseUrl = "https://alter-ego.fandom.com";
+		const usersByName = new Map<string, { userId: string; avatar: string }>();
+		const chunkSize = 50;
+
+		for (let i = 0; i < userNames.length; i += chunkSize) {
+			const batch = userNames.slice(i, i + chunkSize);
+			const detailsUrl = `${baseUrl}/api/v1/User/Details?ids=${encodeURIComponent(batch.join(","))}`;
+			const proxiedDetailsUrl = `${this.proxyBase}${detailsUrl}`;
+
+			try {
+				const response = await fetch(proxiedDetailsUrl);
+				if (!response.ok) continue;
+				const data = await response.json();
+				const items = data?.items;
+				if (!Array.isArray(items)) continue;
+
+				for (const item of items) {
+					if (
+						typeof item?.name === "string" &&
+						typeof item?.user_id === "number" &&
+						typeof item?.avatar === "string"
+					) {
+						usersByName.set(item.name, {
+							userId: String(item.user_id),
+							avatar: item.avatar,
+						});
+					}
+				}
+			} catch (error) {
+				continue;
+			}
+		}
+
+		return usersByName;
 	}
 
 	private static getCachedData(
@@ -260,17 +305,18 @@ export class RecapService {
 
 				const summary = await summaryRes.json();
 				const rawData = rawRes && rawRes.ok ? await rawRes.json() : [];
+				const names = Object.keys(summary.counts || {});
+				const usersByName = await this.fetchModernUsersByNames(names);
 
 				const contributors = Object.entries(summary.counts)
 					.map(([name, count]) => {
-						const userEvent = rawData.find(
-							(e: any) => e.embeds[0]?.author?.name === name,
-						);
-						const avatar = userEvent?.embeds[0]?.author?.iconURL || "";
+						const userInfo = usersByName.get(name);
+						const userId = userInfo?.userId || "N/A";
+						const avatar = userInfo?.avatar || RecapService.fallbackAvatar;
 
 						return {
 							userName: name,
-							userId: "N/A",
+							userId: userId,
 							avatar: avatar,
 							contributions: count as number,
 							isAdmin: false,
@@ -294,9 +340,7 @@ export class RecapService {
 	}
 
 	static extractAvatarUrl(avatarSource: string): string {
-		const fallbackAvatar =
-			"https://vignette.wikia.nocookie.net/messaging/images/1/19/Avatar.jpg";
-		if (!avatarSource) return fallbackAvatar;
+		if (!avatarSource) return this.fallbackAvatar;
 
 		let extractedUrl = "";
 		if (avatarSource.startsWith("http")) {
@@ -306,7 +350,7 @@ export class RecapService {
 			if (imgMatch && imgMatch[1]) {
 				extractedUrl = imgMatch[1];
 			} else {
-				return fallbackAvatar;
+				return this.fallbackAvatar;
 			}
 		}
 

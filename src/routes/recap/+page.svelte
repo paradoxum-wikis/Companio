@@ -568,8 +568,6 @@
 									RecapService.extractAvatarUrl(
 										contributor.avatar,
 									)}
-								{@const hasAvatar =
-									contributor.avatar?.startsWith("http")}
 								<button
 									class="leaderboard-item text-left flex items-center gap-4 w-full cursor-pointer hover:bg-muted/50 transition-colors border-b border-border p-4 last:border-0"
 									onclick={() =>
@@ -596,37 +594,18 @@
 										{:else}{i + 1}{/if}
 									</div>
 
-									{#if hasAvatar}
-										<img
-											src={avatarUrl}
-											alt={contributor.userName}
-											class="contributor-avatar shrink-0 h-12 w-12 rounded-full border border-border object-cover"
-											onerror={(e) => {
-												const el =
-													e.currentTarget as HTMLImageElement;
-												el.style.display = "none";
-												(
-													el.nextElementSibling as HTMLElement
-												).style.display = "flex";
-											}}
-										/>
-										<div
-											class="contributor-avatar shrink-0 h-12 w-12 rounded-full border border-border items-center justify-center text-lg font-bold text-muted-foreground bg-muted"
-											style="display:none"
-										>
-											{contributor.userName
-												.charAt(0)
-												.toUpperCase()}
-										</div>
-									{:else}
-										<div
-											class="contributor-avatar shrink-0 h-12 w-12 rounded-full border border-border flex items-center justify-center text-lg font-bold text-muted-foreground bg-muted"
-										>
-											{contributor.userName
-												.charAt(0)
-												.toUpperCase()}
-										</div>
-									{/if}
+									<img
+										src={avatarUrl}
+										alt={contributor.userName}
+										class="contributor-avatar shrink-0 h-12 w-12 rounded-full border border-border object-cover"
+										onerror={(e) => {
+											const el =
+												e.currentTarget as HTMLImageElement;
+											if (el.src !== RecapService.fallbackAvatar) {
+												el.src = RecapService.fallbackAvatar;
+											}
+										}}
+									/>
 
 									<div
 										class="contributor-info flex-1 min-w-0"

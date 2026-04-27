@@ -64,6 +64,48 @@ export class RecapService {
 		return `${wiki}-available-files-v5`;
 	}
 
+	// delete later
+	private static async mergeStupidAvatars(
+		wiki: WikiMode,
+		dateString: string,
+		data: any,
+	): Promise<any> {
+		if (
+			!data?.isNeo ||
+			!Array.isArray(data.contributors) ||
+			data.contributors.length === 0
+		) {
+			return data;
+		}
+		const names = data.contributors.map(
+			(c: { userName: string }) => c.userName,
+		);
+		const usersByName = await this.fetchNeoUsersByNames(names);
+		const contributors = data.contributors.map(
+			(c: {
+				userName: string;
+				userId: string;
+				avatar: string;
+				contributions: number;
+				isAdmin: boolean;
+			}) => {
+				const info = usersByName.get(c.userName);
+				return {
+					...c,
+					userId: info?.userId ?? c.userId,
+					avatar: info?.avatar ?? c.avatar,
+				};
+			},
+		);
+		const merged = {
+			...data,
+			contributors,
+			totalContributors: contributors.length,
+		};
+		this.setCachedData(wiki, dateString, merged);
+		return merged;
+	}
+
 	private static async fetchNeoUsersByNames(
 		userNames: string[],
 	): Promise<Map<string, { userId: string; avatar: string }>> {
@@ -339,7 +381,12 @@ export class RecapService {
 		dateString: string,
 	): Promise<any> {
 		const cachedData = this.getCachedData(wiki, dateString);
-		if (cachedData) return cachedData;
+		if (cachedData) {
+			if (cachedData.isNeo) {
+				return this.mergeStupidAvatars(wiki, dateString, cachedData);
+			}
+			return cachedData;
+		}
 
 		const { year } = this.parseDate(dateString);
 		const isLegacy = this.isLegacyFormat(wiki, dateString);

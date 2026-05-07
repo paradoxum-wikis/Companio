@@ -1050,7 +1050,7 @@
 		align-items: center;
 		gap: 0.4rem;
 		padding: 0.5rem 1rem;
-		border-radius: 8px;
+		border-radius: .85rem;
 		background: var(--background);
 		border: 1px solid var(--border);
 		color: var(--foreground);

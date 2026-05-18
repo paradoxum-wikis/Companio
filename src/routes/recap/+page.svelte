@@ -642,7 +642,7 @@
 											{contributor.userName}
 											{#if contributor.isAdmin}
 												<span
-													class="admin-badge ml-2 px-2 py-0.5 text-[0.65rem] tracking-wider rounded font-bold bg-primary/10 text-primary"
+													class="admin-badge ms-2 px-2 py-0.5 text-[0.65rem] tracking-wider rounded font-bold bg-primary/10 text-primary"
 													>Administrator</span
 												>
 											{/if}
@@ -652,7 +652,7 @@
 												class="text-muted-foreground flex items-center text-xs"
 											>
 												<UserIcon
-													class="mr-1"
+													class="me-1"
 													size={12}
 												/>
 												User ID: {contributor.userId}
@@ -711,7 +711,7 @@
 							class="flex items-center text-sm text-muted-foreground font-medium"
 						>
 							<span
-								class="inline-block mr-2 h-3 w-3 rounded-sm"
+								class="inline-block me-2 h-3 w-3 rounded-sm"
 								style="background:{getPaletteColor(i)};"
 							></span>
 							{c.userName}

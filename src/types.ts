@@ -6,7 +6,9 @@ export interface Contributor {
 	userContactPage: string;
 	isAdmin: boolean;
 	isCurrent: boolean;
-	contributions: string;
+	contributions: string | number;
+	totalContributions?: number;
+	hasRelevantContributions?: boolean;
 	latestRevision: string | null;
 	index: number;
 }

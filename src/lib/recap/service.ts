@@ -57,7 +57,7 @@ export class RecapService {
 	}
 
 	private static getCacheKey(wiki: WikiMode, dateString: string): string {
-		return `${wiki}-recap-${dateString}`;
+		return `${wiki}-recap-v2-${dateString}`;
 	}
 
 	private static getIndexCacheKey(wiki: WikiMode): string {
@@ -70,7 +70,10 @@ export class RecapService {
 		if (userNames.length === 0) return new Map();
 
 		const baseUrl = "https://alter-ego.fandom.com";
-		const usersByName = new Map<string, { userId: string; avatar: string }>();
+		const usersByName = new Map<
+			string,
+			{ userId: string; avatar: string }
+		>();
 		const usersToFetch: string[] = [];
 		const chunkSize = 50;
 		const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
@@ -206,13 +209,18 @@ export class RecapService {
 				const key = localStorage.key(i);
 				if (
 					key &&
-					(key.startsWith("aew-recap-") || key.startsWith("tdsw-recap-"))
+					(key.startsWith("aew-recap-") ||
+						key.startsWith("tdsw-recap-"))
 				) {
 					cacheEntries.push({ key, date: key });
 				}
 			}
 			const entriesToRemove = Math.ceil(cacheEntries.length * 0.25);
-			for (let i = 0; i < entriesToRemove && i < cacheEntries.length; i++) {
+			for (
+				let i = 0;
+				i < entriesToRemove && i < cacheEntries.length;
+				i++
+			) {
 				localStorage.removeItem(cacheEntries[i].key);
 			}
 		} catch (error) {}
@@ -239,7 +247,9 @@ export class RecapService {
 
 			const neoFolders = rootData.filter(
 				(i: any) =>
-					i.type === "dir" && i.name !== "legacy" && /^\d{4}$/.test(i.name),
+					i.type === "dir" &&
+					i.name !== "legacy" &&
+					/^\d{4}$/.test(i.name),
 			);
 			await Promise.all(
 				neoFolders.map(async (folder: any) => {
@@ -247,7 +257,9 @@ export class RecapService {
 					if (!res.ok) return;
 					const data = await res.json();
 					data.forEach((item: any) => {
-						const match = item.name.match(/^(\d{4}-\d{2}-\d{2})\.json$/);
+						const match = item.name.match(
+							/^(\d{4}-\d{2}-\d{2})\.json$/,
+						);
 						if (match) availableFiles.add(match[1]);
 					});
 				}),
@@ -352,7 +364,8 @@ export class RecapService {
 
 				let response = await fetch(yearUrl);
 				if (!response.ok) response = await fetch(directUrl);
-				if (!response.ok) throw new Error(`Failed to fetch legacy data`);
+				if (!response.ok)
+					throw new Error(`Failed to fetch legacy data`);
 
 				const data = await response.json();
 				this.setCachedData(wiki, dateString, data);
@@ -366,28 +379,53 @@ export class RecapService {
 					fetch(rawUrl).catch(() => null),
 				]);
 
-				if (!summaryRes.ok) throw new Error("Failed to fetch neo recap data");
+				if (!summaryRes.ok)
+					throw new Error("Failed to fetch neo recap data");
 
 				const summary = await summaryRes.json();
 				const rawData = rawRes && rawRes.ok ? await rawRes.json() : [];
-				const names = Object.keys(summary.counts || {});
+				const counts = (summary?.counts || {}) as Record<
+					string,
+					number
+				>;
+				const relevantByName = (summary?.irrelevantCounts ||
+					null) as Record<
+					string,
+					{ relevant?: number; change?: number }
+				> | null;
+				const names = Object.keys(counts);
 				const usersByName = await this.fetchNeoUsersByNames(names);
 
-				const contributors = Object.entries(summary.counts)
+				const contributors = Object.entries(counts)
 					.map(([name, count]) => {
 						const userInfo = usersByName.get(name);
 						const userId = userInfo?.userId || "N/A";
-						const avatar = userInfo?.avatar || RecapService.fallbackAvatar;
+						const avatar =
+							userInfo?.avatar || RecapService.fallbackAvatar;
+						const totalContributions = Number(count) || 0;
+						const relevantCandidate = Number(
+							relevantByName?.[name]?.relevant,
+						);
+						const hasRelevantContributions =
+							Number.isFinite(relevantCandidate);
 
 						return {
 							userName: name,
-							userId: userId,
-							avatar: avatar,
-							contributions: count as number,
+							userId,
+							avatar,
+							contributions: hasRelevantContributions
+								? relevantCandidate
+								: totalContributions,
+							totalContributions,
+							hasRelevantContributions,
 							isAdmin: false,
 						};
 					})
-					.sort((a, b) => b.contributions - a.contributions);
+					.sort(
+						(a, b) =>
+							b.contributions - a.contributions ||
+							b.totalContributions - a.totalContributions,
+					);
 
 				const data = {
 					isNeo: true,
@@ -432,7 +470,8 @@ export class RecapService {
 		if (!forceLatest) {
 			const urlParams = new URLSearchParams(window.location.search);
 			const dateParam = urlParams.get("date");
-			if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) return dateParam;
+			if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam))
+				return dateParam;
 		}
 
 		await this.ensureAvailableFiles(wiki);

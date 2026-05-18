@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { RecapService } from "$lib/recap/service.js";
-	import type { RecapData } from "../../types.js";
+	import type { Contributor, RecapData } from "../../types.js";
 	import "./recap.css";
 
 	import * as Chart from "$lib/components/ui/chart/index.js";
@@ -100,6 +100,18 @@
 				? "https://tds.fandom.com/wiki/User:"
 				: "https://alter-ego.fandom.com/wiki/User:";
 		return `${base}${encodeURIComponent(userName)}`;
+	}
+
+	function getContributionTitle(contributor: Contributor): string {
+		const relevant = Number(contributor.contributions) || 0;
+		if (!contributor.hasRelevantContributions) {
+			return `${contributor.userName} (${relevant.toLocaleString()})`;
+		}
+
+		const total = Number(
+			contributor.totalContributions ?? contributor.contributions,
+		);
+		return `${contributor.userName} (${relevant.toLocaleString()} (${total.toLocaleString()}))`;
 	}
 
 	async function handleModeSwitch() {
@@ -651,9 +663,21 @@
 									<div class="text-right shrink-0">
 										<div
 											class="contributions-count text-primary text-xl font-bold"
-											use:countUp={contributor.contributions}
 										>
-											0
+											<span
+												use:countUp={contributor.contributions}
+												>0</span
+											>
+											{#if contributor.hasRelevantContributions}
+												<span
+													class="text-muted-foreground text-sm font-semibold"
+												>
+													({Number(
+														contributor.totalContributions ??
+															contributor.contributions,
+													).toLocaleString()})
+												</span>
+											{/if}
 										</div>
 										<small
 											class="text-muted-foreground contributions-text text-xs"
@@ -677,7 +701,7 @@
 							style="width:{(Number(c.contributions) /
 								totalContributions) *
 								100}%;background:{getPaletteColor(i)}"
-							title="{c.userName} ({c.contributions})"
+							title={getContributionTitle(c)}
 						></div>
 					{/each}
 				</div>
@@ -1050,7 +1074,7 @@
 		align-items: center;
 		gap: 0.4rem;
 		padding: 0.5rem 1rem;
-		border-radius: .85rem;
+		border-radius: 0.85rem;
 		background: var(--background);
 		border: 1px solid var(--border);
 		color: var(--foreground);

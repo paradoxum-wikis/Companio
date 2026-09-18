@@ -26,7 +26,11 @@ export function getPaletteColor(i: number) {
 export function getUserProfileUrl(
 	userName: string,
 	wikiMode: "aew" | "tdsw",
+	weekDate?: string,
 ): string {
+	if (wikiMode === "tdsw" && (!weekDate || weekDate >= "2026-09-14")) {
+		return `https://tds.wiki/w/User:${encodeURIComponent(userName)}`;
+	}
 	const base =
 		wikiMode === "tdsw"
 			? "https://tds.fandom.com/wiki/User:"

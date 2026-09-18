@@ -24,12 +24,14 @@
 		contributors,
 		totalContributions,
 		wikiMode,
+		currentDate,
 	}: {
 		loading: boolean;
 		errorMessage: string | null;
 		contributors: Contributor[] | undefined;
 		totalContributions: number;
 		wikiMode: "aew" | "tdsw";
+		currentDate: string;
 	} = $props();
 </script>
 
@@ -77,6 +79,7 @@
 									getUserProfileUrl(
 										contributor.userName,
 										wikiMode,
+										currentDate,
 									),
 									"_blank",
 								)}

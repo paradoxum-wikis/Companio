@@ -208,6 +208,7 @@
 		contributors={recapData?.contributors}
 		{totalContributions}
 		{wikiMode}
+		{currentDate}
 	/>
 
 	{#if analytics}

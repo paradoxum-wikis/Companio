@@ -38,17 +38,27 @@ export function buildAnals(rawData: any[]) {
 		typeNew = 0,
 		typeUpload = 0,
 		typeRemoval = 0;
+	let total = 0;
 
 	for (const entry of rawData) {
+		const embed = entry.embeds?.[0];
+		const title: string = embed?.title || "";
+		const normalizedTitle = title.toLowerCase();
+		if (
+			normalizedTitle === "created account" ||
+			normalizedTitle === "migrated account"
+		) {
+			continue;
+		}
+
+		total++;
 		const d = new Date(entry.timestamp);
 		hourCounts[d.getHours()]++;
 
 		const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 		isoDateCounts[iso] = (isoDateCounts[iso] || 0) + 1;
 
-		const embed = entry.embeds?.[0];
 		if (!embed) continue;
-		const title: string = embed.title || "";
 
 		// Edit type
 		const isBlank =
@@ -158,7 +168,7 @@ export function buildAnals(rawData: any[]) {
 		totalAdded,
 		totalRemoved,
 		netChange: totalAdded - totalRemoved,
-		total: rawData.length,
+		total,
 	};
 }
 

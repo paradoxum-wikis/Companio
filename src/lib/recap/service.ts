@@ -9,7 +9,7 @@ export class RecapService {
 		"https://vignette.wikia.nocookie.net/messaging/images/1/19/Avatar.jpg";
 	private static readonly proxyBase = "https://api.tds-editor.com/?url=";
 	private static readonly neoUserCacheKey = "recap-neo-users-v2";
-	private static readonly recapCacheVersion = 4;
+	private static readonly recapCacheVersion = 5;
 	private static readonly maxCachedRecaps = 8;
 	private static recapCacheCleaned = false;
 

@@ -1,4 +1,5 @@
 import type { RecapData, DateInfo } from "$lib/types";
+import { buildAnals } from "./analytics";
 import { TDS_WIKI_MIGRATION_DATE } from "./helpers";
 
 export type WikiMode = "aew" | "tdsw";
@@ -8,6 +9,9 @@ export class RecapService {
 		"https://vignette.wikia.nocookie.net/messaging/images/1/19/Avatar.jpg";
 	private static readonly proxyBase = "https://api.tds-editor.com/?url=";
 	private static readonly neoUserCacheKey = "recap-neo-users-v2";
+	private static readonly recapCacheVersion = 4;
+	private static readonly maxCachedRecaps = 8;
+	private static recapCacheCleaned = false;
 
 	private static availableFiles: Record<WikiMode, Set<string> | null> = {
 		aew: null,
@@ -58,8 +62,43 @@ export class RecapService {
 	}
 
 	private static getCacheKey(wiki: WikiMode, dateString: string): string {
-		const version = wiki === "tdsw" ? "v3" : "v2";
-		return `${wiki}-recap-${version}-${dateString}`;
+		return `${wiki}-recap-v${this.recapCacheVersion}-${dateString}`;
+	}
+
+	private static clearOldRecapCache(): void {
+		if (this.recapCacheCleaned) return;
+		this.recapCacheCleaned = true;
+		localStorage.removeItem("recap-neo-users-v1");
+		localStorage.removeItem(this.neoUserCacheKey);
+
+		for (let i = localStorage.length - 1; i >= 0; i--) {
+			const key = localStorage.key(i);
+			const match = key?.match(
+				/^(?:aew|tdsw)-recap-v(\d+)-\d{4}-\d{2}-\d{2}$/,
+			);
+			if (match && Number(match[1]) < this.recapCacheVersion) {
+				localStorage.removeItem(key!);
+			}
+		}
+	}
+
+	private static pruneCachedRecaps(wiki: WikiMode, dateString: string): void {
+		const prefix = `${wiki}-recap-v${this.recapCacheVersion}-`;
+		const currentKey = this.getCacheKey(wiki, dateString);
+		const keys: string[] = [];
+
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i);
+			if (key?.startsWith(prefix) && key !== currentKey) keys.push(key);
+		}
+
+		keys.sort();
+		for (const key of keys.slice(
+			0,
+			Math.max(0, keys.length - this.maxCachedRecaps + 1),
+		)) {
+			localStorage.removeItem(key);
+		}
 	}
 
 	private static getIndexCacheKey(wiki: WikiMode): string {
@@ -95,6 +134,10 @@ export class RecapService {
 			string,
 			{ userId: string; avatar: string; cachedAt: number }
 		> = raw ? JSON.parse(raw) : {};
+
+		for (const [name, cached] of Object.entries(cache)) {
+			if (now - cached.cachedAt >= oneWeekMs) delete cache[name];
+		}
 
 		for (const name of userNames) {
 			const cached = cache[name];
@@ -244,6 +287,7 @@ export class RecapService {
 		dateString: string,
 		data: any,
 	): void {
+		this.pruneCachedRecaps(wiki, dateString);
 		localStorage.setItem(
 			this.getCacheKey(wiki, dateString),
 			JSON.stringify(data),
@@ -253,6 +297,7 @@ export class RecapService {
 	private static async fetchAvailableFiles(
 		wiki: WikiMode,
 	): Promise<Set<string>> {
+		this.clearOldRecapCache();
 		const indexKey = this.getIndexCacheKey(wiki);
 		const cached = localStorage.getItem(indexKey);
 		if (cached) {
@@ -366,6 +411,7 @@ export class RecapService {
 		wiki: WikiMode,
 		dateString: string,
 	): Promise<any> {
+		this.clearOldRecapCache();
 		const cachedData = this.getCachedData(wiki, dateString);
 		if (cachedData) return cachedData;
 
@@ -443,8 +489,8 @@ export class RecapService {
 		const data = {
 			isNeo: true,
 			totalContributors: contributors.length,
-			contributors: contributors,
-			rawData: rawData,
+			contributors,
+			analytics: buildAnals(rawData),
 		};
 
 		this.setCachedData(wiki, dateString, data);

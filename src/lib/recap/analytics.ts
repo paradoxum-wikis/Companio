@@ -25,7 +25,7 @@ const KNOWN_NS = [
 	"Module",
 ];
 
-export function buildAnalytics(rawData: any[]) {
+export function buildAnals(rawData: any[]) {
 	if (!rawData?.length) return null;
 
 	const hourCounts = Array(24).fill(0);
@@ -162,4 +162,4 @@ export function buildAnalytics(rawData: any[]) {
 	};
 }
 
-export type Analytics = NonNullable<ReturnType<typeof buildAnalytics>>;
+export type Analytics = NonNullable<ReturnType<typeof buildAnals>>;

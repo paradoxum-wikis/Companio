@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { RecapService } from "$lib/recap/service";
-	import { buildAnalytics } from "$lib/recap/analytics";
 	import type { RecapData } from "$lib/types";
 	import PageShell from "$lib/components/PageShell.svelte";
 	import RecapHeader from "$lib/components/recap/RecapHeader.svelte";
@@ -41,9 +40,7 @@
 			: 0,
 	);
 
-	let analytics = $derived(
-		recapData?.rawData?.length ? buildAnalytics(recapData.rawData) : null,
-	);
+	let analytics = $derived(recapData?.analytics ?? null);
 
 	async function handleModeSwitch() {
 		currentDate = await RecapService.getCurrentWeekDate(wikiMode, true);

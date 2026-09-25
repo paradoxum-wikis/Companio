@@ -1,3 +1,5 @@
+import type { Analytics } from "$lib/recap/analytics";
+
 export interface Contributor {
 	userName: string;
 	userId: string;
@@ -17,7 +19,7 @@ export interface RecapData {
 	totalContributors: number;
 	contributors: Contributor[];
 	isNeo?: boolean;
-	rawData?: any[];
+	analytics?: Analytics | null;
 }
 
 export interface DateInfo {

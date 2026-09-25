@@ -1,5 +1,7 @@
 import type { Contributor } from "$lib/types";
 
+export const TDS_WIKI_MIGRATION_DATE = "2026-09-14";
+
 export const palette = [
 	"#FF1744",
 	"#00E676",
@@ -28,7 +30,10 @@ export function getUserProfileUrl(
 	wikiMode: "aew" | "tdsw",
 	weekDate?: string,
 ): string {
-	if (wikiMode === "tdsw" && (!weekDate || weekDate >= "2026-09-14")) {
+	if (
+		wikiMode === "tdsw" &&
+		(!weekDate || weekDate >= TDS_WIKI_MIGRATION_DATE)
+	) {
 		return `https://tds.wiki/w/User:${encodeURIComponent(userName)}`;
 	}
 	const base =

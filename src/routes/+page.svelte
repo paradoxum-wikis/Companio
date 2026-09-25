@@ -186,7 +186,7 @@
 			</a>
 
 			<a
-				href="https://tds.fandom.com/wiki/"
+				href="https://tds.wiki/w/"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="card card-wiki"
@@ -195,7 +195,6 @@
 				<div class="card-accent-bar"></div>
 				<div class="card-icon-row">
 					<div class="card-icon"><Book class="size-5" /></div>
-					<div class="card-badge">Fandom</div>
 				</div>
 				<div class="card-body">
 					<h2 class="card-title">Tower Defense Simulator</h2>

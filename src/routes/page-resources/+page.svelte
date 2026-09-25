@@ -275,7 +275,7 @@
 					<Card.Content>
 						<p class="info-copy">
 							Go <a
-								href="https://tds.fandom.com/wiki/Badges"
+								href="https://tds.wiki/w/Badges"
 								target="_blank"
 								rel="noopener noreferrer"
 							>

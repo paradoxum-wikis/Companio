@@ -1,4 +1,5 @@
 import type { RecapData, DateInfo } from "$lib/types";
+import { TDS_WIKI_MIGRATION_DATE } from "./helpers";
 
 export type WikiMode = "aew" | "tdsw";
 
@@ -6,7 +7,7 @@ export class RecapService {
 	static readonly fallbackAvatar =
 		"https://vignette.wikia.nocookie.net/messaging/images/1/19/Avatar.jpg";
 	private static readonly proxyBase = "https://api.tds-editor.com/?url=";
-	private static readonly neoUserCacheKey = "recap-neo-users-v1";
+	private static readonly neoUserCacheKey = "recap-neo-users-v2";
 
 	private static availableFiles: Record<WikiMode, Set<string> | null> = {
 		aew: null,
@@ -57,7 +58,8 @@ export class RecapService {
 	}
 
 	private static getCacheKey(wiki: WikiMode, dateString: string): string {
-		return `${wiki}-recap-v2-${dateString}`;
+		const version = wiki === "tdsw" ? "v3" : "v2";
+		return `${wiki}-recap-${version}-${dateString}`;
 	}
 
 	private static getIndexCacheKey(wiki: WikiMode): string {
@@ -66,10 +68,20 @@ export class RecapService {
 
 	private static async fetchNeoUsersByNames(
 		userNames: string[],
+		wiki: WikiMode,
+		dateString: string,
 	): Promise<Map<string, { userId: string; avatar: string }>> {
 		if (userNames.length === 0) return new Map();
 
-		const baseUrl = "https://alter-ego.fandom.com";
+		const usesIntegratedProfiles =
+			wiki === "tdsw" && dateString >= TDS_WIKI_MIGRATION_DATE;
+		const baseUrl =
+			wiki === "aew"
+				? "https://alter-ego.fandom.com"
+				: usesIntegratedProfiles
+					? "https://tds.wiki"
+					: "https://tds.fandom.com";
+		const cacheKey = `${this.neoUserCacheKey}-${wiki}-${usesIntegratedProfiles ? "integrated-profiles" : "fandom"}`;
 		const usersByName = new Map<
 			string,
 			{ userId: string; avatar: string }
@@ -78,7 +90,7 @@ export class RecapService {
 		const chunkSize = 50;
 		const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
 		const now = Date.now();
-		const raw = localStorage.getItem(this.neoUserCacheKey);
+		const raw = localStorage.getItem(cacheKey);
 		const cache: Record<
 			string,
 			{ userId: string; avatar: string; cachedAt: number }
@@ -98,9 +110,67 @@ export class RecapService {
 
 		for (let i = 0; i < usersToFetch.length; i += chunkSize) {
 			const batch = usersToFetch.slice(i, i + chunkSize);
+
+			if (usesIntegratedProfiles) {
+				const usersParams = new URLSearchParams({
+					action: "query",
+					list: "users",
+					ususers: batch.join("|"),
+					format: "json",
+					origin: "*",
+				});
+				const avatarsParams = new URLSearchParams({
+					action: "query",
+					list: "integratedprofileavatar",
+					ipauser: batch.join("|"),
+					format: "json",
+					origin: "*",
+				});
+				const [usersResponse, avatarsResponse] = await Promise.all([
+					fetch(`${baseUrl}/api.php?${usersParams}`, {
+						credentials: "omit",
+					}),
+					fetch(`${baseUrl}/api.php?${avatarsParams}`, {
+						credentials: "omit",
+					}),
+				]);
+				if (!usersResponse.ok || !avatarsResponse.ok) continue;
+
+				const [usersData, avatarsData] = await Promise.all([
+					usersResponse.json(),
+					avatarsResponse.json(),
+				]);
+				const userIds = new Map<string, string>();
+				for (const user of usersData?.query?.users || []) {
+					if (
+						typeof user?.name === "string" &&
+						typeof user?.userid === "number"
+					) {
+						userIds.set(user.name, String(user.userid));
+					}
+				}
+
+				const avatars =
+					avatarsData?.query?.integratedprofileavatar || [];
+				for (const item of avatars) {
+					if (
+						typeof item?.user !== "string" ||
+						typeof item?.avatar_url !== "string"
+					) {
+						continue;
+					}
+					const userId = userIds.get(item.user);
+					if (!userId) continue;
+
+					const avatar = new URL(item.avatar_url, baseUrl).href;
+					cache[item.user] = { userId, avatar, cachedAt: now };
+					usersByName.set(item.user, { userId, avatar });
+				}
+				continue;
+			}
+
 			const usersUrl = `${baseUrl}/api.php?action=query&list=users&ususers=${encodeURIComponent(batch.join("|"))}&format=json`;
 			const proxiedUsersUrl = `${this.proxyBase}${encodeURIComponent(usersUrl)}`;
-
 			const usersResponse = await fetch(proxiedUsersUrl, {
 				credentials: "omit",
 			});
@@ -156,7 +226,7 @@ export class RecapService {
 			}
 		}
 
-		localStorage.setItem(this.neoUserCacheKey, JSON.stringify(cache));
+		localStorage.setItem(cacheKey, JSON.stringify(cache));
 		return usersByName;
 	}
 
@@ -334,7 +404,11 @@ export class RecapService {
 			{ relevant?: number; change?: number }
 		> | null;
 		const names = Object.keys(counts);
-		const usersByName = await this.fetchNeoUsersByNames(names);
+		const usersByName = await this.fetchNeoUsersByNames(
+			names,
+			wiki,
+			dateString,
+		);
 
 		const contributors = Object.entries(counts)
 			.map(([name, count]) => {
